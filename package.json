@@ -5,7 +5,7 @@
   "main": "dist/three-dxf.js",
   "module": "src/index.js",
   "scripts": {
-    "build-dev": "webpack --mode development webpack.dev.js",
+    "build-dev": "webpack --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
   "repository": {
