@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {
   OrbitControls
 } from './OrbitControls';
-console.log('updated')
+
 // Three.js extension functions. Webpack doesn't seem to like it if we modify the THREE object directly.
 var THREEx = {
   Math: {}

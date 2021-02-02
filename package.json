@@ -2,11 +2,12 @@
   "name": "three-dxf",
   "version": "1.0.0",
   "description": "A dxf viewer for the browser using three.js.",
-  "main": "dist/three-dxf.js",
+  "main": "lib/three-dxf.js",
   "module": "src/index.js",
   "scripts": {
     "build-dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack --config webpack.prod.js --progress --colors --watch"
   },
   "repository": {
     "type": "git",
@@ -23,16 +24,23 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3"
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
   },
   "peerDependencies": {
-    "three": "0.x.x"
+    "three": "0.101.1"
   },
   "keywords": [
     "dxf",
     "cad",
     "viewer"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "three": "^0.101.1"
+  }
 }
