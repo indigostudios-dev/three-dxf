@@ -1,7 +1,3 @@
-import * as THREE from 'three';
-import { OrbitControls } from './OrbitControls';
-import THREEx from './Extensions';
-
 /**
  * Viewer class for a dxf object.
  * @param {Object} data - the dxf object
@@ -11,6 +7,11 @@ import THREEx from './Extensions';
  * @param {Object} font - a font loaded with THREE.FontLoader 
  * @constructor
  */
+
+import * as THREE from 'three';
+import OrbitControls from './OrbitControls';
+import THREEx from './Extensions';
+
 function Viewer(data, parent, width, height, font) {
   createLineTypeShaders(data);
 

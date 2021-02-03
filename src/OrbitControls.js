@@ -23,7 +23,7 @@
 
 import * as THREE from 'three';
 
-export function OrbitControls( object, domElement ) {
+function OrbitControls( object, domElement ) {
 
 	this.object = object;
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
@@ -637,3 +637,5 @@ export function OrbitControls( object, domElement ) {
 };
 
 OrbitControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+
+export default OrbitControls;
