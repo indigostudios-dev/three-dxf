@@ -141,36 +141,36 @@ function Viewer(data, parent, props={}) {
   };
 }
 
-function drawEntity(options) {
-  const {entity} = options;
+function drawEntity(props) {
+  const {entity} = props;
 
   switch (entity.type) {
     case 'CIRCLE':
     case 'ARC':
-      return drawArc(options);
+      return drawArc(props);
     case 'POLYLINE':
     case 'LWPOLYLINE':
     case 'LINE':
-      return drawLine(options);
+      return drawLine(props);
     case 'TEXT':
-      return drawText(options);
+      return drawText(props);
     case 'SOLID':
-      return drawSolid(options);
+      return drawSolid(props);
     case 'POINT':
-      return drawPoint(options);
+      return drawPoint(props);
     case 'INSERT':
-      return drawBlock(options);
+      return drawBlock(props);
     case 'SPLINE':
-      return drawSpline(options);
+      return drawSpline(props);
     case 'MTEXT':
-      return drawMtext(options);
+      return drawMtext(props);
     case 'ELLIPSE':
-      return drawEllipse(options);
+      return drawEllipse(props);
     case 'DIMENSION':
       const dimTypeEnum = entity.dimensionType & 7;
 
       if (dimTypeEnum === 0) {
-       return drawDimension(options);
+       return drawDimension(props);
       } else {
         console.log("Unsupported Dimension type: " + dimTypeEnum);
       }
@@ -670,29 +670,5 @@ function createDashedLineShader(pattern) {
 
   return dashedLineShader;
 }
-
-// // This function definitely busted
-// function findExtents(scene) {
-//   for (let child of scene.children) {
-//     const minX, maxX, minY, maxY;
-//     if (child.position) {
-//       minX = Math.min(child.position.x, minX);
-//       minY = Math.min(child.position.y, minY);
-//       maxX = Math.max(child.position.x, maxX);
-//       maxY = Math.max(child.position.y, maxY);
-//     }
-//   }
-
-//   return {
-//     min: {
-//       x: minX,
-//       y: minY
-//     },
-//     max: {
-//       x: maxX,
-//       y: maxY
-//     }
-//   };
-// }
 
 export default Viewer
