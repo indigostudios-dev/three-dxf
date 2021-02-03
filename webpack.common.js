@@ -6,8 +6,8 @@ module.exports = {
         filename: 'three-dxf.js',
         path: path.resolve(__dirname, 'lib'),
         library: 'ThreeDxf',
-        libraryTarget: 'umd',
-        globalObject: 'typeof self !== \'undefined\' ? self : this'
+        libraryTarget: 'umd'
+        // globalObject: 'typeof self !== \'undefined\' ? self : this'
     },
     module: {
         rules: [{
@@ -15,6 +15,11 @@ module.exports = {
             exclude: /(node_modules)/,
             use: 'babel-loader',
         }],
+    },
+    devServer: {
+        static: path.join(__dirname, 'sample'),
+        port: 9000,
+        host: 'localhost'
     },
     externals: {
         three: 'THREE'

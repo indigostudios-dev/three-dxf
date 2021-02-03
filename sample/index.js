@@ -1,4 +1,3 @@
-
 var progress = document.getElementById('file-progress-bar');
 var $progress = $('.progress');
 
@@ -12,7 +11,6 @@ dropZone.on('dragover', handleDragOver, false);
 dropZone.on('drop', onFileSelected, false);
 
 document.getElementById('dxf').addEventListener('change', onFileSelected, false);
-
 
 function onFileSelected(evt) {
     progress.style.width = '0%';
@@ -73,7 +71,7 @@ function onSuccess(evt){
     progress.style.width = '100%';
     progress.textContent = '100%';
     setTimeout(function() { $progress.removeClass('loading'); }, 2000);
-    var parser = new window.DxfParser();
+    var parser = new DxfParser();
     var dxf = parser.parseSync(fileReader.result);
     
     if(dxf) {
@@ -89,7 +87,7 @@ function onSuccess(evt){
     var loader = new THREE.FontLoader();
     loader.load( 'fonts/helvetiker_regular.typeface.json', function ( response ) {
         font = response;
-        cadCanvas = new window.ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
+        cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
     });
     
 }
