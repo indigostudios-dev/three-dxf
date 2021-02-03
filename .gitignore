@@ -5,3 +5,4 @@ typings/
 build/
 .vscode/
 lib/
+data/

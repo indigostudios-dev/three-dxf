@@ -17,7 +17,13 @@ function onFileSelected(evt) {
     progress.textContent = '0%';
 
     var file = evt.target.files[0];
+
+    loadFile(file);
+}
+
+function loadFile(file) {
     var output = [];
+    window.history.pushState(null, null, "?file=" + file.name);
     output.push('<li><strong>', encodeURI(file.name), '</strong> (', file.type || 'n/a', ') - ',
         file.size, ' bytes, last modified: ',
         file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
@@ -96,4 +102,28 @@ function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const fileName = urlParams.get('file');
+
+if (!!fileName === true) {
+    $.ajax({
+        url: `data/${fileName}`,
+        // cache: false,
+        xhr: function(){
+            var xhr = new XMLHttpRequest();
+            xhr.responseType= 'blob'
+            return xhr;
+        },
+        success: (file)=> {
+            var reader = new FileReader();
+            reader.onprogress = updateProgress;
+            reader.onloadend = onSuccess;
+            reader.onabort = abortUpload;
+            reader.onerror = errorHandler;
+            reader.readAsText(file);
+        },
+        error: errorHandler
+    })
 }
