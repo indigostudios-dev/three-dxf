@@ -17,22 +17,22 @@ document.getElementById('dxf').addEventListener('change', onFileSelected, false)
 function onFileSelected(evt) {
     var file = evt.target.files[0];
 
+    window.history.pushState(null, null, "/");
+
     loadFile(file);
 }
 
 function loadFile(file) {
     const output = [];
-    
-    window.history.pushState(null, null, "?file=" + file.name);
-    
+       
     output.push('<li><strong>', encodeURI(file.name), '</strong> (', file.type || 'n/a', ') - ',
     file.size, ' bytes, last modified: ',
     file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
     '</li>');
     document.getElementById('file-description').innerHTML = '<ul>' + output.join('') + '</ul>';
     
-    $progress.style.width = '0%';
-    $progress.textContent = '0%';
+    progress.style.width = '0%';
+    progress.textContent = '0%';
     $progress.addClass('loading');
 
     readFile(file);
@@ -120,6 +120,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const fileName = urlParams.get('file');
 
 if (!!fileName === true) {
+    window.history.pushState(null, null, "?file=" + fileName);
+
     $.ajax({
         url: `data/${fileName}`,
         // cache: false,

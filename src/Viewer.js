@@ -120,6 +120,10 @@ function Viewer(data, parent, viewerWidth, viewerHeight, font) {
   controls.update();
 }
 
+Viewer.prototype.info = function() {
+  console.log( this.renderer.info );
+}
+
 Viewer.prototype.render = function() {
   this.renderer.render(this.scene, this.camera)
 }

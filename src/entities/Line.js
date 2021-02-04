@@ -38,7 +38,7 @@ const Line = (entity) => {
 
   // set material
   if (entity.props.lineType) {
-    lineType = data.tables.lineType.lineTypes[entity.props.lineType];
+    lineType = entity.source.tables.lineType.lineTypes[entity.props.lineType];
   }
 
   const material = lineType && lineType.pattern && lineType.pattern.length !== 0
