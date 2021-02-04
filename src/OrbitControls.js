@@ -1,4 +1,9 @@
-import * as THREE from 'three';
+import {
+	EventDispatcher,
+	Vector2,
+	Vector3,
+	fingered
+} from 'three';
 
 /**
  * @author qiao / https://github.com/qiao
@@ -35,7 +40,7 @@ function OrbitControls( object, domElement ) {
 
 	// "target" sets the location of focus, where the control orbits around
 	// and where it pans with respect to.
-	this.target = new THREE.Vector3();
+	this.target = new Vector3();
 
 	// center is old, deprecated; use "target" instead
 	this.center = this.target;
@@ -79,27 +84,27 @@ function OrbitControls( object, domElement ) {
 
 	var EPS = 0.000001;
 
-	var rotateStart = new THREE.Vector2();
-	var rotateEnd = new THREE.Vector2();
-	var rotateDelta = new THREE.Vector2();
+	var rotateStart = new Vector2();
+	var rotateEnd = new Vector2();
+	var rotateDelta = new Vector2();
 
-	var panStart = new THREE.Vector2();
-	var panEnd = new THREE.Vector2();
-	var panDelta = new THREE.Vector2();
-	var panOffset = new THREE.Vector3();
+	var panStart = new Vector2();
+	var panEnd = new Vector2();
+	var panDelta = new Vector2();
+	var panOffset = new Vector3();
 
-	var offset = new THREE.Vector3();
+	var offset = new Vector3();
 
-	var dollyStart = new THREE.Vector2();
-	var dollyEnd = new THREE.Vector2();
-	var dollyDelta = new THREE.Vector2();
+	var dollyStart = new Vector2();
+	var dollyEnd = new Vector2();
+	var dollyDelta = new Vector2();
 
 	var phiDelta = 0;
 	var thetaDelta = 0;
 	var scale = 1;
-	var pan = new THREE.Vector3();
+	var pan = new Vector3();
 
-	var lastPosition = new THREE.Vector3();
+	var lastPosition = new Vector3();
 
 	var STATE = { NONE : -1, ROTATE : 0, DOLLY : 1, PAN : 2, TOUCH_ROTATE : 3, TOUCH_DOLLY : 4, TOUCH_PAN : 5 };
 
@@ -516,7 +521,7 @@ function OrbitControls( object, domElement ) {
 				dollyStart.set( 0, distance );
 				break;
 
-			case 3: // three-fingered touch: pan
+			case 3: // fingered touch: pan
 
 				if ( scope.noPan === true ) return;
 
@@ -591,7 +596,7 @@ function OrbitControls( object, domElement ) {
 				scope.update();
 				break;
 
-			case 3: // three-fingered touch: pan
+			case 3: // fingered touch: pan
 
 				if ( scope.noPan === true ) return;
 				if ( state !== STATE.TOUCH_PAN ) return;
@@ -635,6 +640,6 @@ function OrbitControls( object, domElement ) {
 
 };
 
-OrbitControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+OrbitControls.prototype = Object.create( EventDispatcher.prototype );
 
 export default OrbitControls;
