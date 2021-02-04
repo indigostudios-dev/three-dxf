@@ -37,14 +37,12 @@
     "webpack-merge": "^5.7.3"
   },
   "peerDependencies": {
-    "three": "0.101.1"
+    "three": "0.x.x"
   },
   "keywords": [
     "dxf",
     "cad",
     "viewer"
   ],
-  "dependencies": {
-    "three": "^0.101.1"
-  }
+  "dependencies": {}
 }
