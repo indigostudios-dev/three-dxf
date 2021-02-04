@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 /**
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
@@ -20,8 +22,6 @@
 //    	controls = new THREE.TrackballControls( camera );
 //      controls.target.z = 150;
 // Simple substitute "OrbitControls" and the control should work as-is.
-
-import * as THREE from 'three';
 
 function OrbitControls( object, domElement ) {
 

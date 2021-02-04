@@ -15,7 +15,7 @@ import Entity from './Entity';
 function Viewer(data, parent, viewerWidth, viewerHeight, font) {
   const scene = this.scene = new THREE.Scene();
 
-  // Give Entity class access to common objects
+  // Provide entity class access to common objects
   Entity.prototype.source = data;
   Entity.prototype.font = font;
   Entity.prototype.scene = scene;

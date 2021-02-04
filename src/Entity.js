@@ -1,5 +1,11 @@
 import * as Entities from './entities';
 
+/**
+ * Entity class to draw a specific entity
+ * @param {string} type The type of entity to be drawn
+ * @param {object} props The entity object
+ * @constructor
+ */
 function Entity(type, props) {
   this.type = type;
   this.props = props;
