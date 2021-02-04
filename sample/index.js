@@ -5,6 +5,8 @@ var $cadview = $('#cad-view');
 var dxfContentEl = $('#dxf-content')[0];
 var cadCanvas;
 
+const viewerLoadMark = "viewerLoadMark";
+
 // Setup the dnd listeners.
 var dropZone = $('.drop-zone');
 dropZone.on('dragover', handleDragOver, false);
@@ -13,26 +15,31 @@ dropZone.on('drop', onFileSelected, false);
 document.getElementById('dxf').addEventListener('change', onFileSelected, false);
 
 function onFileSelected(evt) {
-    progress.style.width = '0%';
-    progress.textContent = '0%';
-
     var file = evt.target.files[0];
 
     loadFile(file);
 }
 
 function loadFile(file) {
-    var output = [];
+    const output = [];
+    
     window.history.pushState(null, null, "?file=" + file.name);
+    
     output.push('<li><strong>', encodeURI(file.name), '</strong> (', file.type || 'n/a', ') - ',
-        file.size, ' bytes, last modified: ',
-        file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
-        '</li>');
+    file.size, ' bytes, last modified: ',
+    file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
+    '</li>');
     document.getElementById('file-description').innerHTML = '<ul>' + output.join('') + '</ul>';
-
+    
+    $progress.style.width = '0%';
+    $progress.textContent = '0%';
     $progress.addClass('loading');
 
-    var reader = new FileReader();
+    readFile(file);
+}
+
+function readFile(file) {
+    const reader = new FileReader();
     reader.onprogress = updateProgress;
     reader.onloadend = onSuccess;
     reader.onabort = abortUpload;
@@ -91,9 +98,14 @@ function onSuccess(evt){
     //  and this discussion https://github.com/mrdoob/three.js/issues/7398 
     var font;
     var loader = new THREE.FontLoader();
-    loader.load( 'fonts/helvetiker_regular.typeface.json', function ( response ) {
-        font = response;
-        cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), {width: 400, height: 400, font});
+    loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {       
+        performance.mark(viewerLoadMark);        
+        cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
+        performance.measure("threedfx-load-time", viewerLoadMark);
+        const elapsed = performance.getEntriesByName("threedfx-load-time", "measure")[0].duration;
+        console.log("Load complete in: " + elapsed + 'ms');
+        performance.clearMarks();
+        performance.clearMeasures();
     });
     
 }
@@ -116,14 +128,7 @@ if (!!fileName === true) {
             xhr.responseType= 'blob'
             return xhr;
         },
-        success: (file)=> {
-            var reader = new FileReader();
-            reader.onprogress = updateProgress;
-            reader.onloadend = onSuccess;
-            reader.onabort = abortUpload;
-            reader.onerror = errorHandler;
-            reader.readAsText(file);
-        },
+        success: readFile,
         error: errorHandler
     })
 }

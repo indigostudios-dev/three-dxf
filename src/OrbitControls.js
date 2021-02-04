@@ -615,7 +615,6 @@ function OrbitControls( object, domElement ) {
 	}
 
 	function touchend( /* event */ ) {
-
 		if ( scope.enabled === false ) return;
 
 		scope.dispatchEvent( endEvent );

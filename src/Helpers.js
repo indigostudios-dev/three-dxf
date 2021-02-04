@@ -46,4 +46,9 @@ const hide = (el) => {
   showHide(el);
 }
 
-export { show, hide, showHide, defaultDisplay }
+export {
+  show,
+  hide,
+  showHide,
+  defaultDisplay
+}
