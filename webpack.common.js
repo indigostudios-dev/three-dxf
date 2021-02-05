@@ -17,11 +17,19 @@ module.exports = {
         }],
     },
     devServer: {
-        static: path.join(__dirname, 'sample'),
+        static: [
+            path.join(__dirname, 'sample'),
+            path.join(__dirname, "node_modules")
+        ],
         port: 9000,
         host: 'localhost'
     },
     externals: {
         three: 'THREE'
     },
+    resolve: {
+        fallback: {
+            "os": false
+        }
+    }
 };

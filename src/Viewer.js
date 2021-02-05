@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 import OrbitControls from './OrbitControls';
 import Entity from './Entity';
 
@@ -12,13 +11,12 @@ import Entity from './Entity';
  * @param {Object} font - a font loaded with THREE.FontLoader 
  * @constructor
  */
-function Viewer(data, parent, viewerWidth, viewerHeight, font) {
+async function Viewer(data, parent, viewerWidth, viewerHeight, font) {
   const scene = this.scene = new THREE.Scene();
 
   // Provide entity class access to common objects
   Entity.prototype.source = data;
   Entity.prototype.font = font;
-  Entity.prototype.scene = scene;
 
   // Create scene from dxf object (data)
   const dims = {
@@ -37,17 +35,17 @@ function Viewer(data, parent, viewerWidth, viewerHeight, font) {
   for (let i = 0; i < data.entities.length; i++) {
     const { type, ...props } = data.entities[i];
 
-    const { entity } = new Entity(type, props);
+    const {entity} = new Entity(type, props);
 
     if (entity) {
-      const bbox = new THREE.Box3().setFromObject(entity);
-      
-      if (bbox.min.x && ((dims.min.x === false) || (dims.min.x > bbox.min.x))) dims.min.x = bbox.min.x;
-      if (bbox.min.y && ((dims.min.y === false) || (dims.min.y > bbox.min.y))) dims.min.y = bbox.min.y;
-      if (bbox.min.z && ((dims.min.z === false) || (dims.min.z > bbox.min.z))) dims.min.z = bbox.min.z;
-      if (bbox.max.x && ((dims.max.x === false) || (dims.max.x < bbox.max.x))) dims.max.x = bbox.max.x;
-      if (bbox.max.y && ((dims.max.y === false) || (dims.max.y < bbox.max.y))) dims.max.y = bbox.max.y;
-      if (bbox.max.z && ((dims.max.z === false) || (dims.max.z < bbox.max.z))) dims.max.z = bbox.max.z;
+      const {min, max} = new THREE.Box3().setFromObject(entity);
+
+      if (min.x && ((dims.min.x === false) || (dims.min.x > min.x))) dims.min.x = min.x;
+      if (min.y && ((dims.min.y === false) || (dims.min.y > min.y))) dims.min.y = min.y;
+      if (min.z && ((dims.min.z === false) || (dims.min.z > min.z))) dims.min.z = min.z;
+      if (max.x && ((dims.max.x === false) || (dims.max.x < max.x))) dims.max.x = max.x;
+      if (max.y && ((dims.max.y === false) || (dims.max.y < max.y))) dims.max.y = max.y;
+      if (max.z && ((dims.max.z === false) || (dims.max.z < max.z))) dims.max.z = max.z;
       
       scene.add(entity);
     }

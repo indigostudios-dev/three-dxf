@@ -1,4 +1,14 @@
 {
-  "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/plugin-proposal-export-default-from"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/transform-runtime"
+  ]
 }

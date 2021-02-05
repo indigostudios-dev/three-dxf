@@ -19,11 +19,9 @@ Entity.prototype.source = null;
 
 Entity.prototype.font = null;
 
-Entity.prototype.scene = null;
-
 Entity.prototype.getColor = function () {
   let color = 0x000000; //default
-  
+
   if (this.props.color) {
     color = this.props.color;
   } else if (this.source.tables && this.source.tables.layer && this.source.tables.layer.layers[this.props.layer]) {
