@@ -17,11 +17,10 @@
         display: inline-block;
         margin: 10px 0;
         /*			border: 1px solid #666;*/
-    }
-    #cad-view > canvas {
         border: 1px solid #666;
+        width: 400px;
+        height: 400px;
     }
-
     .progress {
         opacity: 0;
         -webkit-transition: opacity 1s linear;
@@ -51,7 +50,7 @@
 
         <p>While hovering over the canvas: Right click to pan. Mouse wheel to zoom in an out.</p>
     </div>
-    <div id="cad-view">
+    <canvas id="cad-view"></canvas>
 
     </div>
     <div id="dxf-content-container">

@@ -1,11 +1,6 @@
 var progress = document.getElementById('file-progress-bar');
 var $progress = $('.progress');
-
-var $cadview = $('#cad-view');
 var dxfContentEl = $('#dxf-content')[0];
-var cadCanvas;
-
-const viewerLoadMark = "viewerLoadMark";
 
 // Setup the dnd listeners.
 var dropZone = $('.drop-zone');
@@ -99,10 +94,10 @@ function onSuccess(evt){
     var font;
     var loader = new THREE.FontLoader();
     loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {       
-        performance.mark(viewerLoadMark);        
-        cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
-        performance.measure("threedfx-load-time", viewerLoadMark);
-        const elapsed = performance.getEntriesByName("threedfx-load-time", "measure")[0].duration;
+        performance.mark("viewerLoadMark");        
+        var cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
+        performance.measure("threedfx-load-time", "viewerLoadMark");
+        var elapsed = performance.getEntriesByName("threedfx-load-time", "measure")[0].duration;
         console.log("Load complete in: " + elapsed + 'ms');
         performance.clearMarks();
         performance.clearMeasures();
