@@ -12,7 +12,7 @@ function Entity(type, props) {
   this.type = type;
   this.props = props;
 
-  if (type !== 'TEXT') return;
+  // if (type !== 'TEXT') return;
 
   this.entity = this.draw();
 
