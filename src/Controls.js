@@ -1,87 +1,160 @@
+import { PointerEventTypes, Vector3 } from 'babylonjs';
+
 function Controls(scene) {
-  this.zoomTarget = 5;
+  this.scene = scene;
+  this.engine = scene.getEngine();
 
    // name, alpha, beta, radius, target, scene
-  const camera = new BABYLON.ArcRotateCamera('camera', Math.PI / 2, 0, 10, new BABYLON.Vector3(0,1,0), scene);
+  const camera = this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero());
   camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+  camera.inertia = 0;
+  camera.panningInertia = 0;
+  camera.attachControl(false, true, 1);
 
   const inputManager = camera.inputs;
   inputManager.remove(inputManager.attached.mousewheel);
 
-  this.setViewport(camera, scene);
+  this.oldX = 0; //old mouse pointer x value
+  this.oldY = 0; //old mouse pointer y value
+  this.panning = false;
 
-  scene.onPointerObservable.add(() => {
-    const engine = scene.getEngine();
+  this.setZoom(1, 5);
 
-    this.zoomTarget = BABYLON.Vector3.Unproject(
-        new BABYLON.Vector3(scene.pointerX, scene.pointerY, 0),
-        engine.getRenderWidth(),
-        engine.getRenderHeight(),
-        camera.getWorldMatrix(),
-        camera.getViewMatrix(),
-        camera.getProjectionMatrix()
-    );
-  }, BABYLON.PointerEventTypes.POINTERMOVE);
+  scene.onPointerObservable.add((pointerInfo) => {
+		switch (pointerInfo.type) {
+			case BABYLON.PointerEventTypes.POINTERDOWN:
+				// console.log("scene pointer event. pointerInfo obj:", pointerInfo);
+				console.log(pointerInfo.pickInfo.pickedMesh);
+				break;
+        }
+  });
 
   scene.onPointerObservable.add(({ event }) => {
     event.preventDefault();
+    let delta = (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail || event.deltaY)))) * this.zoomSteps;
 
-    const wheelDelta = (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail || event.deltaY)))) * .5;
+    const min = 0, max = 300;
 
-    setZoom(camera, wheelDelta);
-  }, BABYLON.PointerEventTypes.POINTERWHEEL);
-  
+    if (this.zoomLevel - delta > min && this.zoomLevel - delta < max) {
+        this.zoomLevel -= delta;
+        this._zoomToPoint(delta);
+    }
+  }, PointerEventTypes.POINTERWHEEL);
+
+  scene.onPointerObservable.add(this._panToPoint.bind(this))
+
   // Lock rotation
   const rot_state = {x:camera.alpha , y:camera.beta};
   scene.registerBeforeRender(() => {
     camera.alpha = rot_state.x;
     camera.beta = rot_state.y;
   })
-
-  // Camera Controls
-  camera.attachControl(false, true, 0);
 }
 
-Controls.prototype.setViewport = function (camera, scene) {
-  const {width, height} = scene.getEngine().getRenderingCanvasClientRect();
+Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
+  const {width, height} = this.engine.getRenderingCanvasClientRect();
   const ratio = height / width;
 
-  camera.orthoLeft = -this.zoomTarget;
-  camera.orthoRight = this.zoomTarget;
-  camera.orthoTop = camera.orthoRight * ratio;
-  camera.orthoBottom = camera.orthoLeft * ratio;
+  this.zoomLevel = zoomLevel;
+  this.zoomSteps = zoomSteps;
+
+  this.camera.orthoLeft = -zoomLevel;
+  this.camera.orthoRight = zoomLevel;
+  this.camera.orthoTop = this.camera.orthoRight * ratio;
+  this.camera.orthoBottom = this.camera.orthoLeft * ratio;
 }
 
-const setZoom = (camera, delta) => {
-  if (this.zoomTarget) {
-    const totalX = Math.abs(camera.orthoLeft - camera.orthoRight);
-    const totalY = Math.abs(camera.orthoTop - camera.orthoBottom);
+Controls.prototype._zoomToPoint = function (delta) {
+  const zoomingOut = delta < 0;
 
-    const aspectRatio = totalY / totalX;
+  const totalX = Math.abs(this.camera.orthoLeft - this.camera.orthoRight);
+  const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
+  const aspectRatio = totalY / totalX;
 
-    {
-        const fromCoord = camera.orthoLeft - this.zoomTarget.x;
-        const ratio = fromCoord / totalX;
-        camera.orthoLeft -= ratio * delta;
-    }
-    
-    {
-        const fromCoord = camera.orthoRight - this.zoomTarget.x;
-        const ratio = fromCoord / totalX;
-        camera.orthoRight -= ratio * delta;
-    }
+  const zoomTarget = Vector3.Unproject(
+    new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
+    this.engine.getRenderWidth(),
+    this.engine.getRenderHeight(),
+    this.camera.getWorldMatrix(),
+    this.camera.getViewMatrix(),
+    this.camera.getProjectionMatrix()
+  );
 
-    {
-        const fromCoord = camera.orthoTop - this.zoomTarget.y;
-        const ratio = fromCoord / totalY;
-        camera.orthoTop -= ratio * delta * aspectRatio;
-    }
+  const fromCoord = {
+    left: this.camera.orthoLeft - zoomTarget.x,
+    right: this.camera.orthoRight - zoomTarget.x,
+    top: this.camera.orthoTop - zoomTarget.y,
+    bottom: this.camera.orthoBottom - zoomTarget.y
+  }
 
-    {
-        const fromCoord = camera.orthoBottom - this.zoomTarget.y;
-        const ratio = fromCoord / totalY;
-        camera.orthoBottom -= ratio * delta * aspectRatio;
-    }
+  const ratio = {
+    left: fromCoord.left / totalX,
+    right: fromCoord.right / totalX,
+    top: fromCoord.top / totalY,
+    bottom: fromCoord.bottom / totalY
+  }
+
+  this.camera.orthoLeft -= ratio.left * delta;
+  this.camera.orthoRight -= ratio.right * delta;
+  this.camera.orthoTop -= ratio.top * delta * aspectRatio;
+  this.camera.orthoBottom -= ratio.bottom * delta * aspectRatio;
+}
+
+Controls.prototype._panToPoint = function ({ type, event }) {
+  switch (type) {
+    case PointerEventTypes.POINTERDOWN:
+
+      this.oldX = this.scene.pointerX;
+      this.oldY = this.scene.pointerY;
+
+      if (event.button == 1) {
+        // //enable custom panning 
+        this.panning = true;
+        this.camera.detachControl();
+      }
+
+      break;
+
+    case PointerEventTypes.POINTERUP:
+      if (event.button == 1) {
+        this.panning = false;
+        this.camera.attachControl(true);
+      }
+      break;
+
+    case PointerEventTypes.POINTERMOVE:
+
+      if (this.panning) {
+        const {width, height} = this.engine.getRenderingCanvasClientRect();
+        const scaleWidth = (this.camera.orthoRight - this.camera.orthoLeft) / width;
+        const scaleHeight = (this.camera.orthoBottom - this.camera.orthoTop) / height;
+        const scale = Math.max(scaleWidth, scaleHeight);
+
+        const diff = this.oldX > 0 || this.oldY > 0
+          ? {
+              x: this.scene.pointerX - this.oldX,
+              y: this.scene.pointerY - this.oldY
+            }
+          : {
+              x: 0,
+              y: 0
+            };
+
+        if (this.scene.pointerX < this.oldX || this.scene.pointerX > this.oldX) {
+          // pointer traversing left 
+          this.camera.targetScreenOffset.x = this.camera.targetScreenOffset.x + (diff.x * scale);
+        }
+        if (this.scene.pointerY < this.oldY || this.scene.pointerY > this.oldY) {
+          // pointer traversing up 
+          this.camera.targetScreenOffset.y = this.camera.targetScreenOffset.y - (diff.y * scale);
+        }
+
+        this.oldX = this.scene.pointerX;
+        this.oldY = this.scene.pointerY;
+
+      }
+
+      break;
   }
 }
 

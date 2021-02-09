@@ -1,59 +1,51 @@
 import {
-  Line as ThreeLine,
-  Geometry,
   Vector3,
-  LineDashedMaterial,
-  LineBasicMaterial
-} from 'three';
+  MeshBuilder
+} from 'babylonjs';
 
 import BulgeGeometry from '../BulgeGeometry';
 
 const Line = (entity) => {
-  const geometry = new Geometry(),
-        color = entity.getColor();
-
-  let lineType;
+  const color = entity.getColor(),
+        points = [];
 
   if (!entity.props.vertices) return console.log('entity missing vertices.');
 
+  const lineType = entity.props.lineType ? entity.source.tables.lineType.lineTypes[entity.props.lineType] : null;
+
   // create geometry
   for (let i = 0; i < entity.props.vertices.length; i++) {
+    const vertex = entity.props.vertices[i];
 
-    if (entity.props.vertices[i].bulge) {
-      const bulge = entity.props.vertices[i].bulge;
-      const startPoint = entity.props.vertices[i];
-      const endPoint = i + 1 < entity.props.vertices.length ? entity.props.vertices[i + 1] : geometry.vertices[0];
-
+    if (vertex.bulge) {
+      const bulge = vertex.bulge;
+      const startPoint = vertex;
+      const endPoint = i + 1 < entity.props.vertices.length ? entity.props.vertices[i + 1] : points[0];
       const bulgeGeometry = new BulgeGeometry(startPoint, endPoint, bulge);
-
-      geometry.vertices.push.apply(geometry.vertices, bulgeGeometry.vertices);
+      
+      points.push.apply(points, bulgeGeometry.vertices);
     } else {
-      const vertex = entity.props.vertices[i];
-      geometry.vertices.push(new Vector3(vertex.x, vertex.y, 0));
+      points.push(new Vector3(vertex.x, vertex.y, 0));
     }
-
   }
 
-  if (entity.props.shape) geometry.vertices.push(geometry.vertices[0]);
+  if (entity.props.shape) points.push(points[0]);
 
-  // set material
-  if (entity.props.lineType) {
-    lineType = entity.source.tables.lineType.lineTypes[entity.props.lineType];
+  let line;
+  if (lineType && lineType.pattern && lineType.pattern.length !== 0) {
+    line =  BABYLON.MeshBuilder.CreateDashedLines("lines", {    
+      points,
+      dashSize: 4,
+      gapSize: 4,
+    });
+
+    line.color = color;
+  } else {
+    line = BABYLON.MeshBuilder.CreateLines("lines", {
+      points
+    });
+    line.color = color;
   }
-
-  const material = lineType && lineType.pattern && lineType.pattern.length !== 0
-    ? new LineDashedMaterial({
-        color: color,
-        gapSize: 4,
-        dashSize: 4
-      })
-    : new LineBasicMaterial({
-        linewidth: 1,
-        color: color
-      })
-
-
-  const line = new ThreeLine(geometry, material);
 
   return line;
 }

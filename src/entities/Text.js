@@ -1,13 +1,18 @@
 import {
   TextGeometry,
-  Mesh,
   MeshBasicMaterial
 } from 'three';
+
+import {
+  Mesh,
+  VertexData
+} from 'babylonjs';
 
 const Text = (entity) => {
   if (!entity.font)
     return console.warn('Text is not supported without a Three.js font loaded with THREE.FontLoader! Load a font of your choice and pass this into the constructor. See the sample for this repository or Three.js examples at http://threejs.org/examples/?q=text#webgl_geometry_text for more details.');
 
+  console.log(entity.props)
   const geometry = new TextGeometry(entity.props.text, {
     font: entity.font,
     height: 0,
@@ -19,16 +24,20 @@ const Text = (entity) => {
     geometry.rotateZ(zRotation);
   }
 
-  const material = new MeshBasicMaterial({
-    color: entity.getColor()
-  });
+  const text = new Mesh("custom");
+  const vertexData = new VertexData();
 
-  const text = new Mesh(geometry, material);
-  text.position.x = entity.props.startPoint.x;
-  text.position.y = entity.props.startPoint.y;
-  text.position.z = entity.props.startPoint.z;
+  // const material = new MeshBasicMaterial({
+  //   color: entity.getColor()
+  // });
 
-  return text;
+  
+  // const text = new Mesh(geometry, material);
+  // text.position.x = entity.props.startPoint.x;
+  // text.position.y = entity.props.startPoint.y;
+  // text.position.z = entity.props.startPoint.z;
+
+  // return text;
 }
 
 export default Text;

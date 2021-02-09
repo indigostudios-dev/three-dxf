@@ -1,5 +1,6 @@
 // import * as THREE from 'three';
 import * as BABYLON from 'babylonjs';
+import * as GUI from 'babylonjs-gui';
 
 import Controls from './Controls';
 import Entity from './Entity';
@@ -16,55 +17,66 @@ import Entity from './Entity';
 async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
-
+  scene.clearColor = new BABYLON.Color3(1, 1, 1);
+  
   const controls = new Controls(scene, engine);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  const sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
-  // Move the sphere upward 1/2 of its height
-  sphere.position.y = 1;
-  // Create a built-in "ground" shape; its constructor takes 6 params : name, width, height, subdivision, scene, updatable
-  const ground = BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, scene, false);
-  // Return the created scene
+  // // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
+  // const sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
+  // // Move the sphere upward 1/2 of its height
+  // sphere.position.y = 1;
+  // // Create a built-in "ground" shape; its constructor takes 6 params : name, width, height, subdivision, scene, updatable
+  // const ground = BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, scene, false);
+  // // Return the created scene
  
-  // // Provide entity class access to common objects
-  // Entity.prototype.source = data;
-  // Entity.prototype.font = font;
+  // Provide entity class access to common objects
+  Entity.prototype.source = data;
+  Entity.prototype.font = font;
 
-  // // Create scene from dxf object (data)
-  // const dims = {
-  //   min: {
-  //     x: false,
-  //     y: false,
-  //     z: false
-  //   },
-  //   max: {
-  //     x: false,
-  //     y: false,
-  //     z: false
-  //   }
-  // };
+  // Create scene from dxf object (data)
+  const dims = {
+    min: {
+      x: false,
+      y: false,
+      z: false
+    },
+    max: {
+      x: false,
+      y: false,
+      z: false
+    }
+  };
 
-  // for (let i = 0; i < data.entities.length; i++) {
-  //   const { type, ...props } = data.entities[i];
+  var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+  var textblock = new GUI.TextBlock();
+  textblock.text = "";
+  textblock.fontSize = 24;
+  textblock.color = "black";
+  textblock.height = '40px';
+  advancedTexture.addControl(textblock);
+  textblock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+  textblock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
-  //   const {entity} = new Entity(type, props);
+  for (let i = 0; i < data.entities.length; i++) {
+    const { type, ...props } = data.entities[i];
 
-  //   if (entity) {
-  //     const {min, max} = new THREE.Box3().setFromObject(entity);
+    const {entity} = new Entity(type, props);
 
-  //     if (min.x && ((dims.min.x === false) || (dims.min.x > min.x))) dims.min.x = min.x;
-  //     if (min.y && ((dims.min.y === false) || (dims.min.y > min.y))) dims.min.y = min.y;
-  //     if (min.z && ((dims.min.z === false) || (dims.min.z > min.z))) dims.min.z = min.z;
-  //     if (max.x && ((dims.max.x === false) || (dims.max.x < max.x))) dims.max.x = max.x;
-  //     if (max.y && ((dims.max.y === false) || (dims.max.y < max.y))) dims.max.y = max.y;
-  //     if (max.z && ((dims.max.z === false) || (dims.max.z < max.z))) dims.max.z = max.z;
+    // if (entity) {
+    //   const {min, max} = new THREE.Box3().setFromObject(entity);
+
+    //   if (min.x && ((dims.min.x === false) || (dims.min.x > min.x))) dims.min.x = min.x;
+    //   if (min.y && ((dims.min.y === false) || (dims.min.y > min.y))) dims.min.y = min.y;
+    //   if (min.z && ((dims.min.z === false) || (dims.min.z > min.z))) dims.min.z = min.z;
+    //   if (max.x && ((dims.max.x === false) || (dims.max.x < max.x))) dims.max.x = max.x;
+    //   if (max.y && ((dims.max.y === false) || (dims.max.y < max.y))) dims.max.y = max.y;
+    //   if (max.z && ((dims.max.z === false) || (dims.max.z < max.z))) dims.max.z = max.z;
       
-  //     scene.add(entity);
-  //   }
-  // }
+    //   scene.add(entity);
+    // }
+  }
 
   // const width = viewerWidth || parent.clientWidth;
   // const height = viewerHeight || parent.clientHeight;
@@ -113,18 +125,24 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
 
   // controls.addEventListener('change', this.render.bind(this));
   // this.render();
-  // this.scene.executeWhenReady(() => {
-  //   this.render(true);
-  // });
+  this.scene.executeWhenReady(() => {
+    scene.onPointerObservable.add(({ event }) => {
+      if (!textblock) return;
+  
+      const pos = BABYLON.Vector3.Unproject(
+        new BABYLON.Vector3(scene.pointerX,scene.pointerY,1),
+        engine.getRenderWidth(),
+        engine.getRenderHeight(),
+        BABYLON.Matrix.Identity(), scene.getViewMatrix(),
+        scene.getProjectionMatrix());
+      textblock.text = `${pos.x}, ${pos.y}`;
+    }, BABYLON.PointerEventTypes.MOUSEMOVE);
+  });
 
   engine.runRenderLoop(() => {
     scene.render();
     // this.render()
   })
-}
-
-Viewer.prototype.info = function() {
-  console.log( this.renderer.info );
 }
 
 Viewer.prototype.render = function(force) {
@@ -140,22 +158,6 @@ Viewer.prototype.render = function(force) {
 
 Viewer.prototype.resize = function(width, height) {
   this.engine.resize();
-  // const originalWidth = this.renderer.domElement.width;
-  // const originalHeight = this.renderer.domElement.height;
-
-  // const hscale = width / originalWidth;
-  // const vscale = height / originalHeight;
-
-  // camera.top = (vscale * camera.top);
-  // camera.bottom = (vscale * camera.bottom);
-  // camera.left = (hscale * camera.left);
-  // camera.right = (hscale * camera.right);
-
-  // //        camera.updateProjectionMatrix();
-
-  // this.renderer.setSize(width, height);
-  // this.renderer.setClearColor(0xfffffff, 1);
-  // this.render();
 };
 
 export default Viewer

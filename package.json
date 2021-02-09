@@ -50,6 +50,10 @@
     "viewer"
   ],
   "dependencies": {
-    "babylonjs": "^4.2.0"
+    "babylonjs": "^4.2.0",
+    "babylonjs-gui": "^4.2.0"
+  },
+  "engines": {
+    "yarn": "use npm!"
   }
 }

@@ -1,9 +1,13 @@
 import {
   ArcCurve,
-  BufferGeometry,
-  LineBasicMaterial,
-  Line
+  Geometry
 } from 'three';
+
+import {
+  Arc2,
+  Vector3,
+  MeshBuilder
+} from 'babylonjs';
 
 const Arc = (entity) => {
   let startAngle, endAngle;
@@ -15,21 +19,21 @@ const Arc = (entity) => {
     startAngle = entity.props.startAngle;
     endAngle = entity.props.endAngle;
   }
-
+    
   const curve = new ArcCurve(
     0, 0,
     entity.props.radius,
     startAngle,
-    endAngle);
-
+    endAngle
+  );
+    
   const points = curve.getPoints(32);
-  const geometry = new BufferGeometry().setFromPoints(points);
+  const geometry = new Geometry().setFromPoints(points);
 
-  const material = new LineBasicMaterial({
-    color: entity.getColor()
+  let arc = BABYLON.MeshBuilder.CreateLines("lines", {
+    points: geometry.vertices
   });
-
-  const arc = new Line(geometry, material);
+  arc.color = entity.getColor();
   arc.position.x = entity.props.center.x;
   arc.position.y = entity.props.center.y;
   arc.position.z = entity.props.center.z;

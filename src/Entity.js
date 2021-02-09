@@ -1,5 +1,7 @@
 import * as Entities from './entities';
 
+import { Color3 } from 'babylonjs';
+
 /**
  * Entity class to draw a specific entity
  * @param {string} type The type of entity to be drawn
@@ -9,6 +11,8 @@ import * as Entities from './entities';
 function Entity(type, props) {
   this.type = type;
   this.props = props;
+
+  if (type !== 'TEXT') return;
 
   this.entity = this.draw();
 
@@ -31,7 +35,8 @@ Entity.prototype.getColor = function () {
   if (color == null || color === 0xffffff) {
     color = 0x000000;
   }
-  return color;
+
+  return Color3.FromHexString("#" + color.toString(16));
 }
 
 Entity.prototype.draw = function () {
@@ -45,27 +50,27 @@ Entity.prototype.draw = function () {
       return Entities.Line(this);
     case 'TEXT':
       return Entities.Text(this);
-    case 'SOLID':
-      return Entities.Solid(this);
-    case 'POINT':
-      return Entities.Point(this);
-    case 'INSERT':
-      return Entities.Block(this);
-    case 'SPLINE':
-      return Entities.Spline(this);
-    case 'MTEXT':
-      return Entities.Mtext(this);
-    case 'ELLIPSE':
-      return Entities.Ellipse(this);
-    case 'DIMENSION':
-      const dimTypeEnum = this.props.dimensionType & 7;
+    // case 'SOLID':
+    //   return Entities.Solid(this);
+    // case 'POINT':
+    //   return Entities.Point(this);
+    // case 'INSERT':
+    //   return Entities.Block(this);
+    // case 'SPLINE':
+    //   return Entities.Spline(this);
+    // case 'MTEXT':
+    //   return Entities.Mtext(this);
+    // case 'ELLIPSE':
+    //   return Entities.Ellipse(this);
+    // case 'DIMENSION':
+    //   const dimTypeEnum = this.props.dimensionType & 7;
 
-      if (dimTypeEnum === 0) {
-        return Entities.Dimension(this);
-      } else {
-        console.log("Unsupported Dimension type: " + dimTypeEnum);
-      }
-      break;
+    //   if (dimTypeEnum === 0) {
+    //     return Entities.Dimension(this);
+    //   } else {
+    //     console.log("Unsupported Dimension type: " + dimTypeEnum);
+    //   }
+    //   break;
     default:
       console.log("Unsupported Entity Type: " + JSON.stringify(this.type));
     }
