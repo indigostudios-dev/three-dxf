@@ -12,7 +12,7 @@ function Entity(type, props) {
   this.type = type;
   this.props = props;
 
-  // if (type !== 'SOLID') return;
+  // if (type !== 'POINT') return;
 
   this.entity = this.draw();
 
@@ -56,8 +56,8 @@ Entity.prototype.draw = function () {
       return Entities.Text(this);
     case 'SOLID':
       return Entities.Solid(this);
-    // case 'POINT':
-    //   return Entities.Point(this);
+    case 'POINT':
+      return Entities.Point(this);
     // case 'INSERT':
     //   return Entities.Block(this);
     // case 'SPLINE':

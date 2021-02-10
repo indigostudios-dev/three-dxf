@@ -5,8 +5,6 @@ import * as GUI from 'babylonjs-gui';
 import Controls from './Controls';
 import Entity from './Entity';
 
-import earcut from 'earcut'
-
 /**
  * Viewer class for a dxf object.
  * @param {Object} data - the dxf object
@@ -25,14 +23,7 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-  // // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  // const sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
-  // // Move the sphere upward 1/2 of its height
-  // sphere.position.y = 1;
-  // // Create a built-in "ground" shape; its constructor takes 6 params : name, width, height, subdivision, scene, updatable
-  // const ground = BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, scene, false);
-  // // Return the created scene
- 
+
   // Provide entity class access to common objects
   Entity.prototype.source = data;
   Entity.prototype.font = font;
