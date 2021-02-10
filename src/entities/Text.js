@@ -1,9 +1,4 @@
 import {
-  TextGeometry,
-  MeshBasicMaterial
-} from 'three';
-
-import {
   Mesh,
   Vector3,
   VertexData

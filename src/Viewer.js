@@ -5,6 +5,8 @@ import * as GUI from 'babylonjs-gui';
 import Controls from './Controls';
 import Entity from './Entity';
 
+import earcut from 'earcut'
+
 /**
  * Viewer class for a dxf object.
  * @param {Object} data - the dxf object
