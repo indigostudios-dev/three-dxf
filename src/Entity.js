@@ -23,7 +23,7 @@ Entity.prototype.source = null;
 
 Entity.prototype.font = null;
 
-Entity.prototype.getColor = function () {
+Entity.prototype.getColor = function (getHexCode) {
   let color = 0x000000; //default
 
   if (this.props.color) {
@@ -36,7 +36,11 @@ Entity.prototype.getColor = function () {
     color = 0x000000;
   }
 
-  return Color3.FromHexString("#" + color.toString(16));
+  if (getHexCode) {
+    return "#" + color.toString(16);
+  } else {
+    return Color3.FromHexString("#" + color.toString(16));
+  }
 }
 
 Entity.prototype.draw = function () {
