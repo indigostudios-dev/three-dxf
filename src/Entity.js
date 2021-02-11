@@ -17,6 +17,10 @@ function Entity(type, props, source) {
 
   this.mesh = this.draw();
 
+  if (this.mesh) {
+    this.mesh.isPickable = false;
+  };
+
   return this;
 };
 

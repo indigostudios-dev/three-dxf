@@ -3,6 +3,7 @@ import { PointerEventTypes, Vector3 } from 'babylonjs';
 function Controls(scene) {
   this.scene = scene;
   this.engine = scene.getEngine();
+  this.activeSelection = null;
 
    // name, alpha, beta, radius, target, scene
   const camera = this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero());
@@ -27,10 +28,19 @@ function Controls(scene) {
   scene.onPointerObservable.add((pointerInfo) => {
 		switch (pointerInfo.type) {
 			case BABYLON.PointerEventTypes.POINTERDOWN:
-				// console.log("scene pointer event. pointerInfo obj:", pointerInfo);
-				console.log(pointerInfo.pickInfo.pickedMesh);
-				break;
+        if (pointerInfo.event.button !== 0) return
+
+        const pick = pointerInfo.pickInfo.pickedMesh;
+        
+        console.log(pick)
+        if (this.activeSelection) {
+          this.activeSelection = this.activeSelection.deselect();
+        } else if (pick.metadata) {
+          this.activeSelection = pick.metadata.select();
         }
+
+				break;
+    }
   });
 
   scene.onPointerObservable.add(({ event }) => {

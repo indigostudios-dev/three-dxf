@@ -14,26 +14,34 @@ const ignore = [
   'SAFETY_CPSC',
 ]
 
-function Block(source) {
+function Component(source) {
   this.layers = {};
   this.geometry = this.build(source);
+  this.isSelected = false;
 
-  this.highlight();
   return this;
 };
 
-Block.prototype.highlight = function () {
-  const boundingInfo = this.getBoundingBox();
+Component.prototype.select = function () {
+  if (this.isSelected) return;
 
-  var highlight = BABYLON.MeshBuilder.CreatePlane("Highlight", {width: boundingInfo.width, height: boundingInfo.height});
-  highlight.material = new BABYLON.StandardMaterial("sm");
-  highlight.material.diffuseColor = BABYLON.Color3.Red();
-  highlight.material.alpha = 0.2;
-  highlight.position = boundingInfo.center;
+  this._highlight();
+  this.isSelected = true;
+
+  return this;
 }
 
-Block.prototype.getBoundingBox = function () {
-  const bb = this.layers[componentGroupName].getHierarchyBoundingVectors(true, mesh => mesh.isPickable);
+Component.prototype.deselect = function () {
+  if (!this.isSelected) return;
+
+  this.highlight.dispose();
+  this.isSelected = false;
+
+  return null;
+}
+
+Component.prototype.getBoundingBox = function () {
+  const bb = this.layers[componentGroupName].getHierarchyBoundingVectors(true/*, mesh => mesh.isPickable*/);
 
   var width = bb.max.x - bb.min.x;
   var height = bb.max.y - bb.min.y;
@@ -42,21 +50,15 @@ Block.prototype.getBoundingBox = function () {
   return {width, height, center};
 }
 
-Block.prototype.select = function () {
-  
-}
-
-Block.prototype.showLayers = function () {
+Component.prototype.showLayers = function () {
   for (let name in this.layers) {
     const layer = layers.find(el => el.LayerName === name)
     
     if (layer) this.layers[name].setEnabled(layer.Visibility === 'Visible' ? true : false);
   }
-
-  console.log(this.layers)
 }
 
-Block.prototype.groupComponents = function () {
+Component.prototype.groupComponents = function () {
   this.layers[componentGroupName] = new AbstractMesh(componentGroupName);
 
   for (let name in this.layers) {
@@ -70,8 +72,8 @@ Block.prototype.groupComponents = function () {
   }
 }
 
-Block.prototype.build = function (source) {
-  const root = new AbstractMesh('root')
+Component.prototype.build = function (source) {
+  const root = new AbstractMesh('root');
 
   for (let i = 0; i < source.entities.length; i++) {
     const { type, ...props } = source.entities[i];
@@ -94,9 +96,28 @@ Block.prototype.build = function (source) {
 
   this.groupComponents();
   this.showLayers();
+  this._definePickRegion();
+
 
   return root;
 }
 
+Component.prototype._definePickRegion = function () {
+  const boundingInfo = this.getBoundingBox();
+  const pickRegion = BABYLON.MeshBuilder.CreatePlane("PickRegion", {width: boundingInfo.width, height: boundingInfo.height});
+  pickRegion.position = boundingInfo.center;
 
-export default Block;
+  pickRegion.metadata = this;
+}
+
+Component.prototype._highlight = function () {
+  const boundingInfo = this.getBoundingBox();
+
+  this.highlight = BABYLON.MeshBuilder.CreatePlane("Highlight", {width: boundingInfo.width, height: boundingInfo.height});
+  this.highlight.material = new BABYLON.StandardMaterial("sm");
+  this.highlight.material.diffuseColor = BABYLON.Color3.Red();
+  this.highlight.material.alpha = 0.2;
+  this.highlight.position = boundingInfo.center;
+}
+
+export default Component;
