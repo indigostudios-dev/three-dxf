@@ -21,6 +21,9 @@ function Controls(scene) {
 
   this.setZoom(1, 5);
 
+  scene.getBoundingBoxRenderer().frontColor.set(1, 0, 0);
+  scene.getBoundingBoxRenderer().backColor.set(0, 1, 0);
+
   scene.onPointerObservable.add((pointerInfo) => {
 		switch (pointerInfo.type) {
 			case BABYLON.PointerEventTypes.POINTERDOWN:
