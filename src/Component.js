@@ -96,7 +96,9 @@ Component.prototype.build = function (source) {
 
   this.groupComponents();
   this.showLayers();
-  this._definePickRegion();
+  // this._highlight();
+
+  this._definePickRegion()
 
 
   return root;
@@ -105,9 +107,9 @@ Component.prototype.build = function (source) {
 Component.prototype._definePickRegion = function () {
   const boundingInfo = this.getBoundingBox();
   const pickRegion = BABYLON.MeshBuilder.CreatePlane("PickRegion", {width: boundingInfo.width, height: boundingInfo.height});
+  pickRegion.isVisible = false;
   pickRegion.position = boundingInfo.center;
-
-  pickRegion.metadata = this;
+  pickRegion.instance = this;
 }
 
 Component.prototype._highlight = function () {

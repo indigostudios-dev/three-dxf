@@ -11,7 +11,6 @@ function Controls(scene) {
   camera.inertia = 0;
   camera.panningInertia = 0;
   camera.attachControl(false, true);
-  // camera.layerMask = 2 | 3
 
   const inputManager = camera.inputs;
   inputManager.remove(inputManager.attached.mousewheel);
@@ -30,14 +29,18 @@ function Controls(scene) {
 			case BABYLON.PointerEventTypes.POINTERDOWN:
         if (pointerInfo.event.button !== 0) return
 
-        const pick = pointerInfo.pickInfo.pickedMesh;
-        
-        console.log(pick)
+        var pick = scene.pick(scene.pointerX, scene.pointerY, (mesh) => {
+          return mesh.name === 'PickRegion'
+        });
+
         if (this.activeSelection) {
           this.activeSelection = this.activeSelection.deselect();
-        } else if (pick.metadata) {
-          this.activeSelection = pick.metadata.select();
         }
+
+        if (pick.hit) {
+          this.activeSelection = pick.pickedMesh.instance.select();
+        }
+
 
 				break;
     }
