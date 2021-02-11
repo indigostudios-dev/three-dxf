@@ -8,20 +8,17 @@ import { Color3 } from 'babylonjs';
  * @param {object} props The entity object
  * @constructor
  */
-function Entity(type, props) {
+function Entity(type, props, source) {
   this.type = type;
   this.props = props;
+  this.source = source;
 
-  // if (type !== 'POINT') return;
+  // if (type !== 'INSERT') return;
 
-  this.entity = this.draw();
+  this.mesh = this.draw();
 
   return this;
 };
-
-Entity.prototype.source = null;
-
-Entity.prototype.font = null;
 
 Entity.prototype.getColor = function (getHexCode) {
   let color = 0x000000; //default

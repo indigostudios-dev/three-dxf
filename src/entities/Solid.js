@@ -1,8 +1,4 @@
 import {
-  Face3
-} from 'three';
-
-import {
   Vector3,
   Vector2
 } from 'babylonjs';
@@ -20,10 +16,14 @@ const Solid = (entity) => {
   const mat = new BABYLON.StandardMaterial("mat");
   mat.diffuseColor = entity.getColor();
   
-  const poly_tri = new BABYLON.PolygonMeshBuilder("polytri", corners, null, earcut);
+  const poly_tri = new BABYLON.PolygonMeshBuilder(entity.props.handle, corners, null, earcut);
   const polygon = poly_tri.build(false, 3);
   polygon.rotation.x = -90 * Math.PI / 180
   polygon.material = mat;
+
+  polygon.layerMask =  0x000003;
+
+  return polygon;
 }
 
 export default Solid;

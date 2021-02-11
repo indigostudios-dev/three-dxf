@@ -5,9 +5,6 @@ import {
 } from 'babylonjs';
 
 const Text = (entity) => {
-  if (!entity.font)
-    return console.warn('Text is not supported without a Three.js font loaded with THREE.FontLoader! Load a font of your choice and pass this into the constructor. See the sample for this repository or Three.js examples at http://threejs.org/examples/?q=text#webgl_geometry_text for more details.');
-
   const font_size = 24 * entity.props.textHeight;
   const font = font_size + "px Arial Narrow";
   
@@ -40,7 +37,7 @@ const Text = (entity) => {
   dynamicTexture.drawText(text, null, DTHeight, font, entity.getColor(true), null, true);
   
   //Create plane and set dynamic texture as material
-  const plane = BABYLON.MeshBuilder.CreatePlane("plane", {width: planeWidth, height: planeHeight});
+  const plane = BABYLON.MeshBuilder.CreatePlane(entity.props.handle, {width: planeWidth, height: planeHeight});
   plane.bakeTransformIntoVertices(BABYLON.Matrix.Translation(planeWidth / 2, planeHeight / 2, 0));
   plane.position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z)
   
@@ -51,6 +48,10 @@ const Text = (entity) => {
   }    
   
   plane.material = mat;
+
+  plane.layerMask =  0x000002;
+
+  return plane;
 }
 
 export default Text;

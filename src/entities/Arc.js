@@ -30,13 +30,15 @@ const Arc = (entity) => {
   const points = curve.getPoints(32);
   const geometry = new Geometry().setFromPoints(points);
 
-  let arc = BABYLON.MeshBuilder.CreateLines("lines", {
+  let arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
     points: geometry.vertices
   });
   arc.color = entity.getColor();
   arc.position.x = entity.props.center.x;
   arc.position.y = entity.props.center.y;
   arc.position.z = entity.props.center.z;
+
+  arc.layerMask = 0x000001;
 
   return arc;
 }

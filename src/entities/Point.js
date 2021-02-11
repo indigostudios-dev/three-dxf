@@ -1,16 +1,9 @@
 import {
-  Geometry,
-  PointsMaterial,
-  VertexColors,
-  Points
-} from 'three';
-
-import {
   Vector3
 } from 'babylonjs';
 
 const Point = (entity) => {
-  const point = new BABYLON.Mesh("point");
+  const point = new BABYLON.Mesh(entity.props.handle);
 
   const mat = new BABYLON.StandardMaterial("mat");
   mat.diffuseColor = entity.getColor();

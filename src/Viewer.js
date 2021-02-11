@@ -3,7 +3,7 @@ import * as BABYLON from 'babylonjs';
 import * as GUI from 'babylonjs-gui';
 
 import Controls from './Controls';
-import Entity from './Entity';
+import Component from './Component';
 
 /**
  * Viewer class for a dxf object.
@@ -14,7 +14,7 @@ import Entity from './Entity';
  * @param {Object} font - a font loaded with THREE.FontLoader 
  * @constructor
  */
-async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
+async function Viewer(data, canvas, viewerWidth, viewerHeight) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
   scene.clearColor = new BABYLON.Color3(1, 1, 1);
@@ -22,11 +22,9 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
   const controls = new Controls(scene, engine);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-  const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-
-  // Provide entity class access to common objects
-  Entity.prototype.source = data;
-  Entity.prototype.font = font;
+  const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0));
+  light.intensity = 1;
+  light.groundColor = new BABYLON.Color3(1,1,1);
 
   // Create scene from dxf object (data)
   const dims = {
@@ -52,24 +50,8 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight, font) {
   textblock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
   textblock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
-  for (let i = 0; i < data.entities.length; i++) {
-    const { type, ...props } = data.entities[i];
+  const component = new Component(data);
 
-    const {entity} = new Entity(type, props);
-
-    // if (entity) {
-    //   const {min, max} = new THREE.Box3().setFromObject(entity);
-
-    //   if (min.x && ((dims.min.x === false) || (dims.min.x > min.x))) dims.min.x = min.x;
-    //   if (min.y && ((dims.min.y === false) || (dims.min.y > min.y))) dims.min.y = min.y;
-    //   if (min.z && ((dims.min.z === false) || (dims.min.z > min.z))) dims.min.z = min.z;
-    //   if (max.x && ((dims.max.x === false) || (dims.max.x < max.x))) dims.max.x = max.x;
-    //   if (max.y && ((dims.max.y === false) || (dims.max.y < max.y))) dims.max.y = max.y;
-    //   if (max.z && ((dims.max.z === false) || (dims.max.z < max.z))) dims.max.z = max.z;
-      
-    //   scene.add(entity);
-    // }
-  }
 
   // const width = viewerWidth || parent.clientWidth;
   // const height = viewerHeight || parent.clientHeight;

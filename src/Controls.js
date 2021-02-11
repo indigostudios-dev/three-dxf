@@ -9,7 +9,8 @@ function Controls(scene) {
   camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
   camera.inertia = 0;
   camera.panningInertia = 0;
-  camera.attachControl(false, true, 1);
+  camera.attachControl(false, true);
+  // camera.layerMask = 2 | 3
 
   const inputManager = camera.inputs;
   inputManager.remove(inputManager.attached.mousewheel);
