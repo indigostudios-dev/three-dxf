@@ -33,7 +33,8 @@ const Line = (entity) => {
 
   let line;
   if (lineType && lineType.pattern && lineType.pattern.length !== 0) {
-    line =  BABYLON.MeshBuilder.CreateDashedLines(entity.props.handle, {    
+    line =  BABYLON.MeshBuilder.CreateDashedLines(entity.props.handle, {   
+      useVertexAlpha: false, 
       points,
       dashSize: 4,
       gapSize: 4,
@@ -42,6 +43,7 @@ const Line = (entity) => {
     line.color = color;
   } else {
     line = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+      useVertexAlpha: false,
       points
     });
     line.color = color;

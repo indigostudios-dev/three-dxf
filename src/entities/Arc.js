@@ -31,6 +31,7 @@ const Arc = (entity) => {
   const geometry = new Geometry().setFromPoints(points);
 
   let arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+    useVertexAlpha: false,
     points: geometry.vertices
   });
   arc.color = entity.getColor();

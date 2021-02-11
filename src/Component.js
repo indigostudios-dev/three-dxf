@@ -1,35 +1,67 @@
 import Entity from './Entity';
 
 import {
+  Color3,
   TransformNode
 } from 'babylonjs';
 
+import layers from './mocks/layers';
+
 function Block(source) {
+  this.layers = {};
   this.geometry = this.build(source);
-console.log(this.geometry.getChildren())
-  // this.geometry.getChildren()[2].setEnabled(false)
+ this.showLayers();
   return this;
 };
+
+Block.prototype.highlight = function () {
+  console.log(this.layers)
+
+  // const layer = this.layers['FL_GO'];
+
+  // layer.showBoundingBox = true;
+
+	// var hl = new BABYLON.HighlightLayer("hl1", null, {
+  //   // blurVerticalSize: 1,
+  //   // blurHorizontalSize: 1,
+  //   // mainTextureRatio: .01,
+  //   mainTextureFixedSize: 64
+  // });
+    
+  // layer.getChildMeshes().forEach(mesh => {
+  //   console.log(mesh)
+  //   hl.addMesh(mesh, BABYLON.Color3.Red());
+  // })
+
+
+}
+
+Block.prototype.showLayers = function () {
+  for (let name in this.layers) {
+    const layer = layers.find(el => el.LayerName === name)
+    
+    if (layer) this.layers[name].setEnabled(layer.Visibility === 'Visible' ? true : false);
+  }
+}
 
 Block.prototype.build = function (source) {
   const root = new TransformNode('root')
 
-  const layers = {};
-
   for (let i = 0; i < source.entities.length; i++) {
     const { type, ...props } = source.entities[i];
 
-    const entity = new Entity(type, props, source);
+    const entity = new Entity(type, props, source, this.layers[props.layer]);
 
     if (!entity.mesh) continue;
 
-    if (!layers[entity.props.layer]) {
-      layers[entity.props.layer] = new TransformNode(entity.props.layer);
-      layers[entity.props.layer].parent = root;
+    if (!this.layers[props.layer]) {
+      this.layers[props.layer] = new TransformNode(props.layer);
+      this.layers[props.layer].parent = root;
     }
-    
-    entity.mesh.parent = layers[entity.props.layer]
 
+    entity.mesh.parent = this.layers[props.layer]
+
+    
     // if (entity) {
     //   const {min, max} = new THREE.Box3().setFromObject(entity);
 
