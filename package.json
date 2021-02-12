@@ -53,8 +53,5 @@
     "viewer"
   ],
   "dependencies": {
-  },
-  "engines": {
-    "yarn": "use npm!"
   }
 }
