@@ -1,7 +1,2 @@
-import Viewer from './Viewer';
-import Entity from './Entity';
-
-export {
-  Viewer,
-  Entity
-};
+export { default as Viewer } from './Viewer';
+export { default as Entity } from './Entity';

@@ -122,9 +122,9 @@ Component.prototype.build = function (source) {
 
   this._groupComponents(root);
   this.showLayers();
-  // this._createPickRegion(root);
-  // this._createHighlight(root);
-  // this._attachDragEvents(root);
+  this._createPickRegion(root);
+  this._createHighlight(root);
+  this._attachDragEvents(root);
 
   return root;
 }
