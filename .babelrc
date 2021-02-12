@@ -7,8 +7,5 @@
       }
     ]
   ],
-  "plugins": [
-    "@babel/plugin-proposal-export-default-from",
-    "@babel/transform-runtime"
-  ]
+  "plugins": ["@babel/plugin-transform-runtime"]
 }

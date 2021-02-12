@@ -38,19 +38,19 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight) {
   light.specular = new BABYLON.Color3(0,0,0);
   light.groundColor = new BABYLON.Color3(1,1,1);
 
-  // Create scene from dxf object (data)
-  const dims = {
-    min: {
-      x: false,
-      y: false,
-      z: false
-    },
-    max: {
-      x: false,
-      y: false,
-      z: false
-    }
-  };
+  // // Create scene from dxf object (data)
+  // const dims = {
+  //   min: {
+  //     x: false,
+  //     y: false,
+  //     z: false
+  //   },
+  //   max: {
+  //     x: false,
+  //     y: false,
+  //     z: false
+  //   }
+  // };
 
   var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   var textblock = new GUI.TextBlock();
