@@ -47,6 +47,7 @@
     "babylonjs-gui": "4.2.x",
     "three": "0.101.x"
   },
+  "sideEffects": false,
   "keywords": [
     "dxf",
     "cad",
