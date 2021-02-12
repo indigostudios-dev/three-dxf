@@ -14,7 +14,7 @@ import Component from './Component';
  * @param {Object} font - a font loaded with THREE.FontLoader 
  * @constructor
  */
-async function Viewer(data, canvas, viewerWidth, viewerHeight) {
+function Viewer(data, canvas, viewerWidth, viewerHeight) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
   const actionManager = this.actionManager = new BABYLON.ActionManager(scene);
