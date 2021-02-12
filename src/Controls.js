@@ -24,48 +24,45 @@ function Controls(scene) {
   scene.getBoundingBoxRenderer().frontColor.set(1, 0, 0);
   scene.getBoundingBoxRenderer().backColor.set(0, 1, 0);
 
-  scene.onPointerObservable.add((pointerInfo) => {
-		switch (pointerInfo.type) {
-			case BABYLON.PointerEventTypes.POINTERDOWN:
-        if (pointerInfo.event.button !== 0) return
+  // scene.onPointerObservable.add((pointerInfo) => {
+	// 	switch (pointerInfo.type) {
+	// 		case BABYLON.PointerEventTypes.POINTERDOWN:
+  //       if (pointerInfo.event.button !== 0) return
         
-        this.dragging = true;
 
-        var pick = scene.pick(scene.pointerX, scene.pointerY, (mesh) => {
-          return mesh.name === 'PickRegion'
-        });
+  //       var pick = scene.pick(scene.pointerX, scene.pointerY, (mesh) => {
+  //         return mesh.name === 'root'
+  //       });
 
 
-        if (this.activeSelection) {
-          this.activeSelection = this.activeSelection.deselect();
-        }
+  //       if (this.activeSelection) {
+  //         this.activeSelection = this.activeSelection.deselect();
+  //       }
 
-        if (pick.hit) {
-          this.activeSelection = pick.pickedMesh.instance.select();
-          console.log(this.activeSelection)
-        }
+  //       if (pick.hit) {
+  //         this.activeSelection = pick.pickedMesh.instance.select();
+  //         console.log(this.activeSelection)
+  //       }
 
-				break;
-      case BABYLON.PointerEventTypes.POINTERUP:
-        this.dragging = false;
-    }
-  });
+	// 			break;
+  //   }
+  // });
 
-  scene.onPointerObservable.add((pointerInfo) => {
-    if (this.dragging && this.activeSelection && pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE) {
+  // scene.onPointerObservable.add((pointerInfo) => {
+  //   if (this.dragging && this.activeSelection && pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE) {
       
-      const dragTarget = Vector3.Unproject(
-        new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
-        this.engine.getRenderWidth(),
-        this.engine.getRenderHeight(),
-        this.camera.getWorldMatrix(),
-        this.camera.getViewMatrix(),
-        this.camera.getProjectionMatrix()
-      );
+  //     const dragTarget = Vector3.Unproject(
+  //       new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
+  //       this.engine.getRenderWidth(),
+  //       this.engine.getRenderHeight(),
+  //       this.camera.getWorldMatrix(),
+  //       this.camera.getViewMatrix(),
+  //       this.camera.getProjectionMatrix()
+  //     );
 
-      this.activeSelection.mesh.position = dragTarget;
-    }
-  });
+  //     this.activeSelection.mesh.position = dragTarget;
+  //   }
+  // });
 
   scene.onPointerObservable.add(({ event }) => {
     event.preventDefault();

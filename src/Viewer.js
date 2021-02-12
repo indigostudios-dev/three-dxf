@@ -18,6 +18,13 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
   const actionManager = this.actionManager = new BABYLON.ActionManager(scene);
+  const gizmoManager = this.gizmoManager = new BABYLON.GizmoManager(scene);
+
+
+  gizmoManager.positionGizmoEnabled = true;
+  gizmoManager.rotationGizmoEnabled = true;
+  gizmoManager.scaleGizmoEnabled = true;
+  gizmoManager.boundingBoxGizmoEnabled = true;
 
   Component.prototype.actionManager = actionManager;
 

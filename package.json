@@ -43,7 +43,9 @@
     "earcut": "^2.2.2"
   },
   "peerDependencies": {
-    "three": "0.101.x"
+    "three": "0.101.x",
+    "babylonjs": "4.2.x",
+    "babylonjs-gui": "4.2.x"
   },
   "keywords": [
     "dxf",
@@ -51,8 +53,6 @@
     "viewer"
   ],
   "dependencies": {
-    "babylonjs": "^4.2.0",
-    "babylonjs-gui": "^4.2.0"
   },
   "engines": {
     "yarn": "use npm!"

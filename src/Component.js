@@ -63,6 +63,26 @@ Component.prototype.showLayers = function () {
   }
 }
 
+Component.prototype._attachDragEvents = function (mesh) {
+  const pointerDragBehavior = new BABYLON.PointerDragBehavior();
+
+  // Listen to drag events
+  pointerDragBehavior.onDragStartObservable.add((event)=>{
+    console.log("dragStart");
+    console.log(event);
+  })
+  pointerDragBehavior.onDragObservable.add((event)=>{
+      console.log("drag");
+      console.log(event);
+  })
+  pointerDragBehavior.onDragEndObservable.add((event)=>{
+      console.log("dragEnd");
+      console.log(event);
+  })
+
+  mesh.addBehavior(pointerDragBehavior);
+}
+
 Component.prototype._groupComponents = function (parent) {
   this.layers[componentGroupName] = new TransformNode(componentGroupName);
   this.layers[componentGroupName].parent = parent;
@@ -102,19 +122,20 @@ Component.prototype.build = function (source) {
 
   this._groupComponents(root);
   this.showLayers();
-  this._createPickRegion(root);
-  this._createHighlight(root);
+  // this._createPickRegion(root);
+  // this._createHighlight(root);
+  // this._attachDragEvents(root);
 
   return root;
 }
 
 Component.prototype._createPickRegion = function (parent) {
   const boundingInfo = this.getBoundingBox(componentGroupName);
-  const pickRegion = BABYLON.MeshBuilder.CreatePlane("PickRegion", {width: boundingInfo.width, height: boundingInfo.height});
-  pickRegion.isVisible = false;
-  pickRegion.position = boundingInfo.center;
-  pickRegion.instance = this;
-  pickRegion.parent = parent;
+  this.pickRegion = BABYLON.MeshBuilder.CreatePlane("PickRegion", {width: boundingInfo.width, height: boundingInfo.height});
+  this.pickRegion.isVisible = false;
+  this.pickRegion.position = boundingInfo.center;
+  this.pickRegion.instance = this;
+  this.pickRegion.parent = parent;
 }
 
 Component.prototype._createHighlight = function (parent) {
