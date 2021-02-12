@@ -17,6 +17,10 @@ import Component from './Component';
 async function Viewer(data, canvas, viewerWidth, viewerHeight) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
+  const actionManager = this.actionManager = new BABYLON.ActionManager(scene);
+
+  Component.prototype.actionManager = actionManager;
+
   scene.clearColor = new BABYLON.Color3(1, 1, 1);
   
   const controls = new Controls(scene, engine);
@@ -24,6 +28,7 @@ async function Viewer(data, canvas, viewerWidth, viewerHeight) {
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0));
   light.intensity = 1;
+  light.specular = new BABYLON.Color3(0,0,0);
   light.groundColor = new BABYLON.Color3(1,1,1);
 
   // Create scene from dxf object (data)

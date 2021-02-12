@@ -17,10 +17,6 @@ function Entity(type, props, source) {
 
   this.mesh = this.draw();
 
-  if (this.mesh) {
-    this.mesh.isPickable = false;
-  };
-
   return this;
 };
 
@@ -59,8 +55,8 @@ Entity.prototype.draw = function () {
       return Entities.Solid(this);
     case 'POINT':
       return Entities.Point(this);
-    // case 'INSERT':
-    //   return Entities.Block(this);
+    case 'INSERT':
+      return Entities.Block(this);
     // case 'SPLINE':
     //   return Entities.Spline(this);
     // case 'MTEXT':

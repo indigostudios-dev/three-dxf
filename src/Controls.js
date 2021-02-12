@@ -1,4 +1,4 @@
-import { PointerEventTypes, Vector3 } from 'babylonjs';
+import { PointerEventTypes, PointerInfo, PointerInfoPre, Vector3 } from 'babylonjs';
 
 function Controls(scene) {
   this.scene = scene;
@@ -19,7 +19,7 @@ function Controls(scene) {
   this.oldY = 0; //old mouse pointer y value
   this.panning = false;
 
-  this.setZoom(1, 5);
+  this.setZoom(100, 5);
 
   scene.getBoundingBoxRenderer().frontColor.set(1, 0, 0);
   scene.getBoundingBoxRenderer().backColor.set(0, 1, 0);
@@ -28,10 +28,13 @@ function Controls(scene) {
 		switch (pointerInfo.type) {
 			case BABYLON.PointerEventTypes.POINTERDOWN:
         if (pointerInfo.event.button !== 0) return
+        
+        this.dragging = true;
 
         var pick = scene.pick(scene.pointerX, scene.pointerY, (mesh) => {
           return mesh.name === 'PickRegion'
         });
+
 
         if (this.activeSelection) {
           this.activeSelection = this.activeSelection.deselect();
@@ -39,10 +42,28 @@ function Controls(scene) {
 
         if (pick.hit) {
           this.activeSelection = pick.pickedMesh.instance.select();
+          console.log(this.activeSelection)
         }
 
-
 				break;
+      case BABYLON.PointerEventTypes.POINTERUP:
+        this.dragging = false;
+    }
+  });
+
+  scene.onPointerObservable.add((pointerInfo) => {
+    if (this.dragging && this.activeSelection && pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE) {
+      
+      const dragTarget = Vector3.Unproject(
+        new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
+        this.engine.getRenderWidth(),
+        this.engine.getRenderHeight(),
+        this.camera.getWorldMatrix(),
+        this.camera.getViewMatrix(),
+        this.camera.getProjectionMatrix()
+      );
+
+      this.activeSelection.mesh.position = dragTarget;
     }
   });
 

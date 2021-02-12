@@ -31,25 +31,19 @@ const Line = (entity) => {
 
   if (entity.props.shape) points.push(points[0]);
 
-  let line;
-  if (lineType && lineType.pattern && lineType.pattern.length !== 0) {
-    line =  BABYLON.MeshBuilder.CreateDashedLines(entity.props.handle, {   
-      useVertexAlpha: false, 
-      points,
-      dashSize: 4,
-      gapSize: 4,
-    });
-
-    line.color = color;
-  } else {
-    line = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
-      useVertexAlpha: false,
-      points
-    });
-    line.color = color;
-  }
-
-  line.layerMask =  0x000001;
+  const line = lineType && lineType.pattern && lineType.pattern.length !== 0
+    ? BABYLON.MeshBuilder.CreateDashedLines(entity.props.handle, {   
+        useVertexAlpha: false, 
+        points,
+        dashSize: 4,
+        gapSize: 4,
+      })
+    : BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+        useVertexAlpha: false,
+        points
+      });
+  
+  line.color = color;
 
   return line;
 }

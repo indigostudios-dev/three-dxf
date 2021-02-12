@@ -2,22 +2,27 @@ import Entity from './Entity';
 
 import {
   Color3,
-  AbstractMesh
+  AbstractMesh,
+  TransformNode
 } from 'babylonjs';
 
 import layers from './mocks/layers';
 
 const componentGroupName = 'COMPONENT2D';
 
-const ignore = [
+const notPickable = [
   'SAFETY_EN',
   'SAFETY_CPSC',
 ]
 
 function Component(source) {
   this.layers = {};
-  this.geometry = this.build(source);
+  this.componentLayers = {};
   this.isSelected = false;
+  
+  this.mesh = this.build(source);
+
+  console.log(this.componentLayers)
 
   return this;
 };
@@ -25,7 +30,7 @@ function Component(source) {
 Component.prototype.select = function () {
   if (this.isSelected) return;
 
-  this._highlight();
+  this.highlight.isVisible = true;
   this.isSelected = true;
 
   return this;
@@ -34,14 +39,14 @@ Component.prototype.select = function () {
 Component.prototype.deselect = function () {
   if (!this.isSelected) return;
 
-  this.highlight.dispose();
+  this.highlight.isVisible = false;
   this.isSelected = false;
 
   return null;
 }
 
-Component.prototype.getBoundingBox = function () {
-  const bb = this.layers[componentGroupName].getHierarchyBoundingVectors(true/*, mesh => mesh.isPickable*/);
+Component.prototype.getBoundingBox = function (layer) {
+  const bb = this.layers[layer].getHierarchyBoundingVectors(true, mesh => mesh.isPickable);
 
   var width = bb.max.x - bb.min.x;
   var height = bb.max.y - bb.min.y;
@@ -58,14 +63,17 @@ Component.prototype.showLayers = function () {
   }
 }
 
-Component.prototype.groupComponents = function () {
-  this.layers[componentGroupName] = new AbstractMesh(componentGroupName);
+Component.prototype._groupComponents = function (parent) {
+  this.layers[componentGroupName] = new TransformNode(componentGroupName);
+  this.layers[componentGroupName].parent = parent;
+  this.layers[componentGroupName].instance = this;
 
   for (let name in this.layers) {
     const layer = layers.find(el => el.LayerName === name);
 
     if (!layer) {
       this.layers[name].parent = this.layers[componentGroupName];
+      this.componentLayers[name] = this.layers[componentGroupName];
 
       delete this.layers[name];
     }
@@ -73,53 +81,52 @@ Component.prototype.groupComponents = function () {
 }
 
 Component.prototype.build = function (source) {
-  const root = new AbstractMesh('root');
+  const root = new TransformNode('root');
 
   for (let i = 0; i < source.entities.length; i++) {
     const { type, ...props } = source.entities[i];
 
-    // Some Layers are in the components but not in the database
-    // Exclude the ones that are left over from rules that arent implemented
-    if (ignore.includes(props.layer)) continue;
-
-    const entity = new Entity(type, props, source, this.layers[props.layer]);
+    const entity = new Entity(type, props, source);
     
     if (!entity.mesh) continue;
 
+    if (notPickable.includes(props.layer)) entity.mesh.isPickable = false;
+
     if (!this.layers[props.layer]) {
-      this.layers[props.layer] = new AbstractMesh(props.layer);
+      this.layers[props.layer] = new TransformNode(props.layer);
       this.layers[props.layer].parent = root;
     }
 
     entity.mesh.parent = this.layers[props.layer]
   }
 
-  this.groupComponents();
-  this.showLayers();
-  // this._highlight();
-
-  this._definePickRegion()
-
+  this._groupComponents(root);
+  // this.showLayers();
+  this._createPickRegion(root);
+  this._createHighlight(root);
 
   return root;
 }
 
-Component.prototype._definePickRegion = function () {
-  const boundingInfo = this.getBoundingBox();
+Component.prototype._createPickRegion = function (parent) {
+  const boundingInfo = this.getBoundingBox(componentGroupName);
   const pickRegion = BABYLON.MeshBuilder.CreatePlane("PickRegion", {width: boundingInfo.width, height: boundingInfo.height});
   pickRegion.isVisible = false;
   pickRegion.position = boundingInfo.center;
   pickRegion.instance = this;
+  pickRegion.parent = parent;
 }
 
-Component.prototype._highlight = function () {
-  const boundingInfo = this.getBoundingBox();
+Component.prototype._createHighlight = function (parent) {
+  const boundingInfo = this.getBoundingBox(componentGroupName);
 
   this.highlight = BABYLON.MeshBuilder.CreatePlane("Highlight", {width: boundingInfo.width, height: boundingInfo.height});
   this.highlight.material = new BABYLON.StandardMaterial("sm");
   this.highlight.material.diffuseColor = BABYLON.Color3.Red();
   this.highlight.material.alpha = 0.2;
   this.highlight.position = boundingInfo.center;
+  this.highlight.isVisible = false;
+  this.highlight.parent = parent;
 }
 
 export default Component;

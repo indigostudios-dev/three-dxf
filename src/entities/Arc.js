@@ -34,12 +34,11 @@ const Arc = (entity) => {
     useVertexAlpha: false,
     points: geometry.vertices
   });
+  
   arc.color = entity.getColor();
   arc.position.x = entity.props.center.x;
   arc.position.y = entity.props.center.y;
   arc.position.z = entity.props.center.z;
-
-  arc.layerMask = 0x000001;
 
   return arc;
 }
