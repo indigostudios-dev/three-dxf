@@ -101,7 +101,7 @@ Component.prototype.build = function (source) {
   }
 
   this._groupComponents(root);
-  // this.showLayers();
+  this.showLayers();
   this._createPickRegion(root);
   this._createHighlight(root);
 
