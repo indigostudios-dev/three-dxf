@@ -6,7 +6,7 @@ import {
 
 const Text = (entity) => {
   const font_size = 24 * entity.props.textHeight;
-  const font = font_size + "px Arial Narrow";
+  const font = font_size + "px simplexregular";
   
   //Set height for plane
   const planeHeight = 1 * entity.props.textHeight;
