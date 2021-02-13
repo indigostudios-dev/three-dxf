@@ -1,9 +1,8 @@
-import { PointerEventTypes, PointerInfo, PointerInfoPre, Vector3 } from 'babylonjs';
+import * as BABYLON from 'babylonjs';
 
 function Controls(scene) {
   this.scene = scene;
   this.engine = scene.getEngine();
-  this.activeSelection = null;
 
    // name, alpha, beta, radius, target, scene
   const camera = this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero());
@@ -24,46 +23,6 @@ function Controls(scene) {
   scene.getBoundingBoxRenderer().frontColor.set(1, 0, 0);
   scene.getBoundingBoxRenderer().backColor.set(0, 1, 0);
 
-  // scene.onPointerObservable.add((pointerInfo) => {
-	// 	switch (pointerInfo.type) {
-	// 		case BABYLON.PointerEventTypes.POINTERDOWN:
-  //       if (pointerInfo.event.button !== 0) return
-        
-
-  //       var pick = scene.pick(scene.pointerX, scene.pointerY, (mesh) => {
-  //         return mesh.name === 'root'
-  //       });
-
-
-  //       if (this.activeSelection) {
-  //         this.activeSelection = this.activeSelection.deselect();
-  //       }
-
-  //       if (pick.hit) {
-  //         this.activeSelection = pick.pickedMesh.instance.select();
-  //         console.log(this.activeSelection)
-  //       }
-
-	// 			break;
-  //   }
-  // });
-
-  // scene.onPointerObservable.add((pointerInfo) => {
-  //   if (this.dragging && this.activeSelection && pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE) {
-      
-  //     const dragTarget = Vector3.Unproject(
-  //       new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
-  //       this.engine.getRenderWidth(),
-  //       this.engine.getRenderHeight(),
-  //       this.camera.getWorldMatrix(),
-  //       this.camera.getViewMatrix(),
-  //       this.camera.getProjectionMatrix()
-  //     );
-
-  //     this.activeSelection.mesh.position = dragTarget;
-  //   }
-  // });
-
   scene.onPointerObservable.add(({ event }) => {
     event.preventDefault();
     let delta = (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail || event.deltaY)))) * this.zoomSteps;
@@ -74,7 +33,7 @@ function Controls(scene) {
         this.zoomLevel -= delta;
         this._zoomToPoint(delta);
     }
-  }, PointerEventTypes.POINTERWHEEL);
+  }, BABYLON.PointerEventTypes.POINTERWHEEL);
 
   scene.onPointerObservable.add(this._panToPoint.bind(this))
 
@@ -106,8 +65,8 @@ Controls.prototype._zoomToPoint = function (delta) {
   const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
   const aspectRatio = totalY / totalX;
 
-  const zoomTarget = Vector3.Unproject(
-    new Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
+  const zoomTarget = BABYLON.Vector3.Unproject(
+    new BABYLON.Vector3(this.scene.pointerX || 0, this.scene.pointerY || 0, 0),
     this.engine.getRenderWidth(),
     this.engine.getRenderHeight(),
     this.camera.getWorldMatrix(),
@@ -137,7 +96,7 @@ Controls.prototype._zoomToPoint = function (delta) {
 
 Controls.prototype._panToPoint = function ({ type, event }) {
   switch (type) {
-    case PointerEventTypes.POINTERDOWN:
+    case BABYLON.PointerEventTypes.POINTERDOWN:
 
       this.oldX = this.scene.pointerX;
       this.oldY = this.scene.pointerY;
@@ -150,14 +109,14 @@ Controls.prototype._panToPoint = function ({ type, event }) {
 
       break;
 
-    case PointerEventTypes.POINTERUP:
+    case BABYLON.PointerEventTypes.POINTERUP:
       if (event.button == 1) {
         this.panning = false;
         this.camera.attachControl(true);
       }
       break;
 
-    case PointerEventTypes.POINTERMOVE:
+    case BABYLON.PointerEventTypes.POINTERMOVE:
 
       if (this.panning) {
         const {width, height} = this.engine.getRenderingCanvasClientRect();
