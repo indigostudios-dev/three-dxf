@@ -43,6 +43,10 @@ function Controls(scene) {
     camera.alpha = rot_state.x;
     camera.beta = rot_state.y;
   })
+
+  return {
+    camera
+  }
 }
 
 Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
