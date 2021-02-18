@@ -69,8 +69,6 @@ Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
 }
 
 Controls.prototype._zoomToPoint = function (zoomDelta = 0) {
-  const zoomingOut = zoomDelta < 0;
-
   const {width, height} = this.engine.getRenderingCanvasClientRect();
   const totalX = Math.abs(this.camera.orthoLeft - this.camera.orthoRight);
   const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
@@ -101,8 +99,8 @@ Controls.prototype._zoomToPoint = function (zoomDelta = 0) {
 
   this.zoomLevel -= zoomDelta;
 
-  this.camera.targetScreenOffset.x += (ratio.left + ratio.right) * zoomDelta/2;
-  this.camera.targetScreenOffset.y += (ratio.top + ratio.bottom) * zoomDelta/2;
+  this.camera.targetScreenOffset.x += (ratio.left + ratio.right) * (zoomDelta/2);
+  this.camera.targetScreenOffset.y += (ratio.top + ratio.bottom) * (zoomDelta/2) * aspectRatio;
 
   this.setZoom();
 }
@@ -136,15 +134,10 @@ Controls.prototype._panToPoint = function ({ type, event }) {
         const scaleHeight = (this.camera.orthoBottom - this.camera.orthoTop) / height;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-        const diff = this.oldX > 0 || this.oldY > 0
-          ? {
-              x: this.scene.pointerX - this.oldX,
-              y: this.scene.pointerY - this.oldY
-            }
-          : {
-              x: 0,
-              y: 0
-            };
+        const diff = {
+          x: this.scene.pointerX - this.oldX || 0,
+          y: this.scene.pointerY - this.oldY || 0
+        }
 
         this.oldX = this.scene.pointerX;
         this.oldY = this.scene.pointerY;
