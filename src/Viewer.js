@@ -19,7 +19,7 @@ function Viewer(data, canvas) {
 
   scene.clearColor = new BABYLON.Color3(1, 1, 1);
   
-  const controls = new Controls(scene, engine);
+  const controls = this.controls = new Controls(scene, engine);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
   const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0));
@@ -59,10 +59,18 @@ function Viewer(data, canvas) {
     }, BABYLON.PointerEventTypes.MOUSEMOVE);
   });
 
+  window.addEventListener("resize", this.resize.bind(this));
+
   engine.runRenderLoop(() => {
     scene.render();
     // this.render()
   })
+}
+
+Viewer.prototype.resize = function () {
+  this.engine.resize();
+
+  this.controls.updateView();
 }
 
 export default Viewer

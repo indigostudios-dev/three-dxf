@@ -42,9 +42,7 @@ const Text = (entity) => {
   plane.position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z)
   
   if (entity.props.rotation) {
-    const zRotation = entity.props.rotation * Math.PI / 180;
-
-    plane.rotation.z = zRotation;
+    plane.rotation.z = entity.props.rotation * Math.PI / 180;
   }    
   
   plane.material = mat;
