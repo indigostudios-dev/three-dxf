@@ -35,6 +35,7 @@ const Text = (entity) => {
   mat.diffuseTexture = dynamicTexture;
   mat.diffuseTexture.hasAlpha = true;
   dynamicTexture.drawText(text, null, DTHeight, font, entity.getColor(true), null, true);
+  mat.freeze();
   
   //Create plane and set dynamic texture as material
   const plane = BABYLON.MeshBuilder.CreatePlane(entity.props.handle, {width: planeWidth, height: planeHeight});

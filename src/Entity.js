@@ -16,6 +16,11 @@ function Entity(type, props, source) {
   // if (type !== 'INSERT') return;
 
   this.mesh = this.draw();
+  
+  if (this.mesh) {
+    this.mesh.doNotSyncBoundingInfo = true;
+    this.mesh.freezeWorldMatrix();
+  }
 
   return this;
 };

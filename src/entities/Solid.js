@@ -15,6 +15,7 @@ const Solid = (entity) => {
 
   const mat = new BABYLON.StandardMaterial("mat");
   mat.diffuseColor = entity.getColor();
+  mat.freeze();
   
   const poly_tri = new BABYLON.PolygonMeshBuilder(entity.props.handle, corners, null, earcut);
   const polygon = poly_tri.build(false, 3);

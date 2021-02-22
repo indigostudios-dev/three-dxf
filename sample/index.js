@@ -62,8 +62,6 @@ function errorHandler(evt) {
 }
 
 function updateProgress(evt) {
-    console.log('progress');
-    console.log(Math.round((evt.loaded /evt.total) * 100));
     if(evt.lengthComputable) {
         var percentLoaded = Math.round((evt.loaded /evt.total) * 100);
         if (percentLoaded < 100) {
@@ -95,7 +93,7 @@ function onSuccess(evt){
     var loader = new THREE.FontLoader();
     loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {       
         performance.mark("viewerLoadMark");        
-        var cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'), 400, 400, font);
+        var cadCanvas = new ThreeDxf.Viewer(dxf, document.getElementById('cad-view'));
         performance.measure("threedfx-load-time", "viewerLoadMark");
         var elapsed = performance.getEntriesByName("threedfx-load-time", "measure")[0].duration;
         console.log("Load complete in: " + elapsed + 'ms');
