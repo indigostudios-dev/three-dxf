@@ -1,7 +1,7 @@
 import {
   Vector2,
   Vector3
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 import { polar, angle2 } from './Math';
 

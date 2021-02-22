@@ -1,5 +1,5 @@
-import * as BABYLON from 'babylonjs';
-import * as GUI from 'babylonjs-gui';
+import * as BABYLON from '@babylonjs/core/Legacy/legacy';
+import * as GUI from '@babylonjs/gui';
 
 import Controls from './Controls';
 import Entity from './Entity';

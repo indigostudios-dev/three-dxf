@@ -1,7 +1,7 @@
 import {
   Vector3,
   Vector2
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 import earcut from 'earcut';
 

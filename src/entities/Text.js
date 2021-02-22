@@ -2,7 +2,7 @@ import {
   Mesh,
   Vector3,
   VertexData
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 const Text = (entity) => {
   const font_size = 24 * entity.props.textHeight;

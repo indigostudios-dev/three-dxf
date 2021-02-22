@@ -1,6 +1,6 @@
 import {
   Vector3
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 const Point = (entity) => {
   const point = new BABYLON.Mesh(entity.props.handle);

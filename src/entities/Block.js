@@ -4,7 +4,7 @@ import {
 
 import {
   TransformNode
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 import Entity from '../Entity';
 

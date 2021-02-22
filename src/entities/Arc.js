@@ -7,7 +7,7 @@ import {
   Arc2,
   Vector3,
   MeshBuilder
-} from 'babylonjs';
+} from '@babylonjs/core/Legacy/legacy';
 
 const Arc = (entity) => {
   let startAngle, endAngle;
