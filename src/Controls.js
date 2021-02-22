@@ -56,7 +56,7 @@ Controls.prototype.updateView = function () {
 }
 
 Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
-  const {width, height} = this.engine.getRenderingCanvasClientRect();
+  const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
   const ratio = height / width;
 
   this.zoomSteps = zoomSteps || this.zoomSteps;
@@ -69,7 +69,7 @@ Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
 }
 
 Controls.prototype._zoomToPoint = function (zoomDelta = 0) {
-  const {width, height} = this.engine.getRenderingCanvasClientRect();
+  const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
   const totalX = Math.abs(this.camera.orthoLeft - this.camera.orthoRight);
   const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
   const aspectRatio = totalY / totalX;
@@ -129,7 +129,7 @@ Controls.prototype._panToPoint = function ({ type, event }) {
 
     case BABYLON.PointerEventTypes.POINTERMOVE:
       if (this.panning) {
-        const {width, height} = this.engine.getRenderingCanvasClientRect();
+        const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
         const scaleWidth = (this.camera.orthoRight - this.camera.orthoLeft) / width;
         const scaleHeight = (this.camera.orthoBottom - this.camera.orthoTop) / height;
         const scale = Math.max(scaleWidth, scaleHeight);
