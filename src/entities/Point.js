@@ -7,7 +7,6 @@ const Point = (entity) => {
 
   const mat = new BABYLON.StandardMaterial("mat");
   mat.diffuseColor = entity.getColor();
-  mat.freeze();
 
   point.position = new Vector3(entity.props.position.x, entity.props.position.y, entity.props.position.z);
 
