@@ -17,8 +17,19 @@ function Entity(type, props, source) {
 
   this.mesh = this.draw();
 
+  if (this.mesh) {
+    this.mesh.freezeWorldMatrix();
+    if (this.mesh.material) this.mesh.material.freeze();
+  }
+
   return this;
 };
+
+Entity.prototype.getMaterial = function (color) {
+  console.log(color)
+  const mat = new BABYLON.StandardMaterial("mat");
+  mat.diffuseColor = entity.getColor();
+}
 
 Entity.prototype.getColor = function (getHexCode) {
   let color = 0x000000; //default
