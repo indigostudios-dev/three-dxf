@@ -18,7 +18,7 @@ function Controls(scene) {
   this.oldY = 0; //old mouse pointer y value
   this.panning = false;
 
-  this.setZoom(200, 10);
+  this.setZoom(400, 10);
 
   scene.getBoundingBoxRenderer().frontColor.set(1, 0, 0);
   scene.getBoundingBoxRenderer().backColor.set(0, 1, 0);
