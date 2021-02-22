@@ -17,11 +17,6 @@ function Entity(type, props, source) {
 
   this.mesh = this.draw();
 
-  if (this.mesh) {
-    this.mesh.freezeWorldMatrix();
-    if (this.mesh.material) this.mesh.material.freeze();
-  }
-
   return this;
 };
 
