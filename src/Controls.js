@@ -27,7 +27,7 @@ function Controls(scene) {
     event.preventDefault();
     const zoomDelta = (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail || event.deltaY)))) * this.zoomSteps;
 
-    const min = 100, max = 300;
+    const min = 100, max = 1500;
 
     const totalX = Math.abs(this.camera.orthoLeft - this.camera.orthoRight);
     const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
