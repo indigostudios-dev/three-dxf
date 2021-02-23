@@ -1,6 +1,6 @@
 import {
   Vector2
-} from 'three';
+} from '@babylonjs/core/Legacy/legacy';
 
 /**
  * Returns the angle in radians of the vector (p1,p2). In other words, imagine
@@ -13,8 +13,9 @@ import {
 const angle2 = (p1, p2) => {
   var v1 = new Vector2(p1.x, p1.y);
   var v2 = new Vector2(p2.x, p2.y);
-  v2.sub(v1); // sets v2 to be our chord
+  v2.subtractInPlace(v1); // sets v2 to be our chord
   v2.normalize();
+
   if (v2.y < 0) return -Math.acos(v2.x);
   return Math.acos(v2.x);
 }

@@ -3,11 +3,14 @@ import {
 } from '@babylonjs/core/Legacy/legacy';
 
 const Point = (entity) => {
-  const point = new BABYLON.Mesh(entity.props.handle);
+  const name = entity.props.handle;
+  const position = new Vector3(entity.props.position.x, entity.props.position.y, entity.props.position.z);
 
-  point.position = new Vector3(entity.props.position.x, entity.props.position.y, entity.props.position.z);
-
-  return point;
+  return {
+    type: 'Mesh',
+    name,
+    position
+  };
 }
 
 export default Point;

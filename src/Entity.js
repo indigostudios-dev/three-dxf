@@ -1,6 +1,6 @@
 import * as Entities from './entities';
 
-import { BabylonFileLoaderConfiguration, Color3 } from '@babylonjs/core/Legacy/legacy';
+import { Color3 } from '@babylonjs/core/Legacy/legacy';
 
 /**
  * Entity class to draw a specific entity
@@ -16,7 +16,7 @@ function Entity(type, props, source) {
   // if (type !== 'INSERT') return;
 
   const mesh = this.draw(); 
-
+// console.log(props, source)
   this.source = null;
   this.props = null;
   this.type = null;

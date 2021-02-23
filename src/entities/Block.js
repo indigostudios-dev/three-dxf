@@ -1,20 +1,20 @@
-import {
-  Object3D
-} from 'three';
-
-import {
-  TransformNode
-} from '@babylonjs/core/Legacy/legacy';
-
-import Entity from '../Entity';
+// import {
+//   TransformNode
+// } from '@babylonjs/core/Legacy/legacy';
 
 const Block = (entity) => {
+  const name = entity.props.handle;
   const block = entity.source.blocks[entity.props.name];
 
   if (!block.entities) return null;
 
-  const group = new TransformNode();
-
+  // const group = new TransformNode();
+  const group = {
+    scale: {},
+    rotation: {},
+    position: {}
+  };
+ 
   if (entity.props.xScale) group.scale.x = entity.props.xScale;
   if (entity.props.yScale) group.scale.y = entity.props.yScale;
 
@@ -41,7 +41,13 @@ const Block = (entity) => {
   //   if (mesh) mesh.parent = registrationMark;
   // }
 
-  return group;
+  return {
+    type: 'TransformNode',
+    name,
+    scale: group.scale,
+    rotation: group.rotation,
+    position: group.position
+  };
 }
 
 export default Block;

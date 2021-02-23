@@ -13,11 +13,11 @@ import { polar, angle2 } from './Math';
  * @param segments - number of segments between the two given points
  */
 function BulgeGeometry(startPoint, endPoint, bulge, segments) {
-  this.vertices = [];
+  const vertices = [];
 
-  let p0 = this.startPoint = startPoint ? new Vector2(startPoint.x, startPoint.y) : new Vector2(0, 0);
-  let p1 = this.endPoint = endPoint ? new Vector2(endPoint.x, endPoint.y) : new Vector2(1, 0);
-  this.bulge = bulge = bulge || 1;
+  const p0 = startPoint ? new Vector2(startPoint.x, startPoint.y) : new Vector2(0, 0);
+  const p1 = endPoint ? new Vector2(endPoint.x, endPoint.y) : new Vector2(1, 0);
+  bulge = bulge || 1;
 
   const angle = 4 * Math.atan(bulge);
   const radius = Vector2.Distance(p0, p1) / 2 / Math.sin(angle / 2);
@@ -27,15 +27,15 @@ function BulgeGeometry(startPoint, endPoint, bulge, segments) {
   const startAngle = angle2(center, p0);
   const thetaAngle = angle / segments;
 
-  this.vertices.push(new Vector3(p0.x, p0.y, 0));
+  vertices.push(new Vector3(p0.x, p0.y, 0));
 
   for (let i = 1; i <= segments; i++) {
     const vertex = polar(center, Math.abs(radius), startAngle + thetaAngle * i);
 
-    this.vertices.push(new Vector3(vertex.x, vertex.y, 0));
+    vertices.push(new Vector3(vertex.x, vertex.y, 0));
   }
 
-  return this;
+  return vertices;
 };
 
 export default BulgeGeometry;

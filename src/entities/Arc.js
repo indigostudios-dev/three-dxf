@@ -1,46 +1,59 @@
 import {
-  ArcCurve,
-  Geometry
-} from 'three';
-
-import {
-  Arc2,
-  Vector3,
-  MeshBuilder
+  Path2,
+  Vector3
 } from '@babylonjs/core/Legacy/legacy';
 
 const Arc = (entity) => {
-  let startAngle, endAngle;
+  const name = entity.props.handle;
+  const color = entity.getColor();
+  const radius = entity.props.radius;
+  const startAngle = entity.props.startAngle;
+  const endAngle = entity.props.endAngle;
+  const angleLength = entity.props.angleLength;
+
+  const direction = -angleLength / Math.abs(angleLength);
+
+  let path;
 
   if (entity.type === 'CIRCLE') {
-    startAngle = entity.props.startAngle || 0;
-    endAngle = startAngle + 2 * Math.PI;
+    path = new BABYLON.Path2(radius, 0)
+      .addArcTo(0, radius, -radius, 0, 16)
+      .addArcTo(0,-radius, radius, 0, 16)
   } else {
-    startAngle = entity.props.startAngle;
-    endAngle = entity.props.endAngle;
+    const startPoint = {
+      x: radius * Math.cos(startAngle),
+      y: radius * Math.sin(startAngle)
+    }
+
+    const endPoint = {
+      x: radius * Math.cos(endAngle),
+      y: radius * Math.sin(endAngle)
+    }
+
+    path = new BABYLON.Path2(startPoint.x, startPoint.y)
+      .addArcTo(radius * direction, 0, endPoint.x, endPoint.y, 32)
   }
-    
-  const curve = new ArcCurve(
-    0, 0,
-    entity.props.radius,
-    startAngle,
-    endAngle
-  );
-    
-  const points = curve.getPoints(32);
-  const geometry = new Geometry().setFromPoints(points);
 
-  let arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
-    useVertexAlpha: false,
-    points: geometry.vertices
-  });
+  const points = path.getPoints().map(point => new Vector3(point.x, point.y, 0));
+
+
+  // let arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+  //   useVertexAlpha: false,
+  //   points: geometry.vertices
+  // });
   
-  arc.color = entity.getColor();
-  arc.position.x = entity.props.center.x;
-  arc.position.y = entity.props.center.y;
-  arc.position.z = entity.props.center.z;
+  // arc.color = entity.getColor();
+  // arc.position.x = entity.props.center.x;
+  // arc.position.y = entity.props.center.y;
+  // arc.position.z = entity.props.center.z;
 
-  return arc;
+  return {
+    type: 'Line',
+    name,
+    points,
+    color,
+    position: entity.props.center
+  };
 }
 
 export default Arc;
