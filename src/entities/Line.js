@@ -44,6 +44,7 @@ const Line = (entity) => {
       });
   
   line.color = color;
+  
 
   return line;
 }

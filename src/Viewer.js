@@ -16,6 +16,7 @@ import Entity from './Entity';
 function Viewer(data, canvas) {
   const engine = this.engine = new BABYLON.Engine(canvas, true, {preserveDrawingBuffer: true, stencil: true});
   const scene = this.scene = new BABYLON.Scene(engine);
+  scene.debugLayer.show();
 
   scene.clearColor = new BABYLON.Color3(1, 1, 1);
   

@@ -22,6 +22,7 @@ const Text = (entity) => {
   const ctx = temp.getContext();
   ctx.font = font;
   const DTWidth = ctx.measureText(text).width;
+  temp.dispose();
   
   //Calcultae ratio
   const ratio = planeHeight/DTHeight;

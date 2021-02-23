@@ -1,6 +1,6 @@
 import * as Entities from './entities';
 
-import { Color3 } from '@babylonjs/core/Legacy/legacy';
+import { BabylonFileLoaderConfiguration, Color3 } from '@babylonjs/core/Legacy/legacy';
 
 /**
  * Entity class to draw a specific entity
@@ -15,16 +15,14 @@ function Entity(type, props, source) {
 
   // if (type !== 'INSERT') return;
 
-  this.mesh = this.draw();
+  const mesh = this.draw(); 
 
-  return this;
+  this.source = null;
+  this.props = null;
+  this.type = null;
+
+  return mesh;
 };
-
-Entity.prototype.getMaterial = function (color) {
-  console.log(color)
-  const mat = new BABYLON.StandardMaterial("mat");
-  mat.diffuseColor = entity.getColor();
-}
 
 Entity.prototype.getColor = function (getHexCode) {
   let color = 0x000000; //default

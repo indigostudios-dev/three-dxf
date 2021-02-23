@@ -28,17 +28,18 @@ const Block = (entity) => {
     group.position.z = entity.props.position.z;
   }
 
-  const registrationMark = new TransformNode('Registraton Mark');
-  registrationMark.parent = group;
-  registrationMark.setEnabled(false);
+  // const registrationMark = new TransformNode('Registraton Mark');
+  // registrationMark.isPickable = false;
+  // registrationMark.parent = group;
+  // registrationMark.setEnabled(false);
   
-  for (let i = 0; i < block.entities.length; i++) {
-    const {type, ...props} = block.entities[i];
+  // for (let i = 0; i < block.entities.length; i++) {
+  //   const {type, ...props} = block.entities[i];
 
-    const {mesh} = new Entity(type, props, entity.source);
+  //   const {mesh} = new Entity(type, props, entity.source);
 
-    if (mesh) mesh.parent = registrationMark;
-  }
+  //   if (mesh) mesh.parent = registrationMark;
+  // }
 
   return group;
 }
