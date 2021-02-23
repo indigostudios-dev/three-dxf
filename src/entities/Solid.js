@@ -6,7 +6,6 @@ import {
 import earcut from 'earcut';
 
 const Solid = (entity) => {
-  const name = entity.props.handle;
   const color = entity.getColor();
   
   const corners = [
@@ -29,7 +28,6 @@ const Solid = (entity) => {
 
   return {
     type: 'Polygon',
-    name,
     color,
     rotation,
     corners,

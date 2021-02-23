@@ -3,7 +3,6 @@ import {
 } from '@babylonjs/core/Legacy/legacy';
 
 const Text = (entity) => {
-  const name = entity.props.handle;
   const text = entity.props.text;
   const color = entity.getColor(true);
   const fontSize = 24 * entity.props.textHeight;
@@ -51,7 +50,6 @@ const Text = (entity) => {
   // plane.layerMask =  0x000002;
 
   return {
-    name,
     color,
     font,
     fontSize,

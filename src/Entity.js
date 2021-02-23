@@ -14,9 +14,10 @@ function Entity(type, props, source) {
   this.source = source;
 
   // if (type !== 'INSERT') return;
+  const mesh = this.draw();
+  mesh.name = this.props.handle;
+  mesh.layer = this.props.layer;
 
-  const mesh = this.draw(); 
-// console.log(props, source)
   this.source = null;
   this.props = null;
   this.type = null;

@@ -6,8 +6,7 @@ import {
 import BulgeGeometry from '../BulgeGeometry';
 
 const Line = (entity) => {
-  const name = entity.props.handle,
-        color = entity.getColor(),
+  const color = entity.getColor(),
         points = [];        
 
   if (!entity.props.vertices) return console.log('entity missing vertices.');
@@ -49,7 +48,6 @@ const Line = (entity) => {
   if (lineType && lineType.pattern && lineType.pattern.length !== 0) {
     return {
       type: 'DashedLine',
-      name,
       points,
       dashSize: 4,
       gapSize: 4,
@@ -58,7 +56,6 @@ const Line = (entity) => {
   } else {
     return {
       type: 'Line',
-      name,
       points,
       color
     };

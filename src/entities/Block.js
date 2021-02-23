@@ -3,7 +3,6 @@
 // } from '@babylonjs/core/Legacy/legacy';
 
 const Block = (entity) => {
-  const name = entity.props.handle;
   const block = entity.source.blocks[entity.props.name];
 
   if (!block.entities) return null;
@@ -43,7 +42,6 @@ const Block = (entity) => {
 
   return {
     type: 'TransformNode',
-    name,
     scale: group.scale,
     rotation: group.rotation,
     position: group.position
