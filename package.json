@@ -46,8 +46,7 @@
   "peerDependencies": {
     "@babel/runtime": "^7.12.13",
     "@babylonjs/core": "4.2.x",
-    "@babylonjs/gui": "^4.2.0",
-    "three": "0.101.x"
+    "@babylonjs/gui": "^4.2.0"
   },
   "sideEffects": false,
   "keywords": [

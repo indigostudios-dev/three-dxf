@@ -8,9 +8,6 @@ import Entity from './Entity';
  * Viewer class for a dxf object.
  * @param {Object} data - the dxf object
  * @param {Object} canvas - the canvas element to which we attach the rendering to
- * @param {Number} viewerWidth - width of the rendering canvas in pixels
- * @param {Number} viewerHeight - height of the rendering canvas in pixels
- * @param {Object} font - a font loaded with THREE.FontLoader 
  * @constructor
  */
 function Viewer(data, canvas) {

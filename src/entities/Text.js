@@ -1,56 +1,68 @@
 import {
-  Mesh,
   Vector3,
-  VertexData
 } from '@babylonjs/core/Legacy/legacy';
 
 const Text = (entity) => {
-  const font_size = 24 * entity.props.textHeight;
-  const font = font_size + "px Arial Narrow";
+  const name = entity.props.handle;
+  const text = entity.props.text;
+  const color = entity.getColor(true);
+  const fontSize = 24 * entity.props.textHeight;
+  const font = fontSize + "px Arial Narrow";
 
   //Set height for plane
   const planeHeight = 1 * entity.props.textHeight;
   
   //Set height for dynamic texture
-  const DTHeight = .725 *font_size; //or set as wished
-    
-  //Set text
-  const text = entity.props.text;
+  const textureHeight = .725 * fontSize; //or set as wished
 
-  //Use a temporay dynamic texture to calculate the length of the text on the dynamic texture canvas
-  const temp = new BABYLON.DynamicTexture("DynamicTexture", 32);
-  const ctx = temp.getContext();
-  ctx.font = font;
-  const DTWidth = ctx.measureText(text).width;
-  temp.dispose();
-  
+  //Use a temporay canvas to calculate the length of the text on the dynamic texture canvas
+  const tempCanvas = document.createElement("canvas");
+  const context = tempCanvas.getContext("2d");
+  context.font = font;
+  const metrics = context.measureText(text);
+  const textureWidth = metrics.width;
+
   //Calcultae ratio
-  const ratio = planeHeight/DTHeight;
+  const ratio = planeHeight/textureHeight;
 
   //Calculate width the plane has to be 
-  const planeWidth = DTWidth * ratio;
+  const planeWidth = textureWidth * ratio;
 
-  //Create dynamic texture and write the text
-  const dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width: DTWidth, height: DTHeight}, false);
-  const mat = new BABYLON.StandardMaterial("mat");
-  mat.diffuseTexture = dynamicTexture;
-  mat.diffuseTexture.hasAlpha = true;
-  dynamicTexture.drawText(text, null, DTHeight, font, entity.getColor(true), null, true);
+  // //Create dynamic texture and write the text
+  // const dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width: textureWidth, height: textureHeight}, false);
+  // const mat = new BABYLON.StandardMaterial("mat");
+  // mat.diffuseTexture = dynamicTexture;
+  // mat.diffuseTexture.hasAlpha = true;
+  // dynamicTexture.drawText(text, null, textureHeight, font, color, null, true);
   
-  //Create plane and set dynamic texture as material
-  const plane = BABYLON.MeshBuilder.CreatePlane(entity.props.handle, {width: planeWidth, height: planeHeight});
-  plane.bakeTransformIntoVertices(BABYLON.Matrix.Translation(planeWidth / 2, planeHeight / 2, 0));
-  plane.position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z)
+  // //Create plane and set dynamic texture as material
+  // const plane = BABYLON.MeshBuilder.CreatePlane(name, {width: planeWidth, height: planeHeight});
+  // plane.bakeTransformIntoVertices(BABYLON.Matrix.Translation(planeWidth / 2, planeHeight / 2, 0));
+  // plane.position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z)
   
-  if (entity.props.rotation) {
-    plane.rotation.z = entity.props.rotation * Math.PI / 180;
-  }    
+  const position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z);
+  const rotation = {z: entity.props.rotation * Math.PI / 180};
+  // if (entity.props.rotation) {
+  //   plane.rotation.z = entity.props.rotation * Math.PI / 180;
+  // }    
   
-  plane.material = mat;
+  // plane.material = mat;
 
-  plane.layerMask =  0x000002;
+  // plane.layerMask =  0x000002;
 
-  return plane;
+  return {
+    name,
+    color,
+    font,
+    fontSize,
+    text,
+    textureHeight,
+    textureWidth,
+    planeWidth,
+    planeHeight,
+    position,
+    rotation
+  };
 }
 
 export default Text;
