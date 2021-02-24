@@ -54,7 +54,6 @@ const Text = (entity) => {
     type: 'Text',
     color,
     font,
-    fontSize,
     text,
     textureHeight,
     textureWidth,
