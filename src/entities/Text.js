@@ -28,7 +28,7 @@ const Text = (entity) => {
   const planeWidth = textureWidth * ratio;
 
   const position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z);
-  const rotation = {z: entity.props.rotation * Math.PI / 180};
+  const rotation = entity.props.rotation && {z: entity.props.rotation * Math.PI / 180};
 
   // //Create dynamic texture and write the text
   // const dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width: textureWidth, height: textureHeight}, false);
