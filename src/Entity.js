@@ -46,42 +46,15 @@ Entity.prototype.getColor = function (getHexCode) {
 }
 
 Entity.prototype.draw = function () {
-  switch (this.type) {
-    case 'CIRCLE':
-    case 'ARC':
-      return Entities.Arc(this);
-    case 'POLYLINE':
-    case 'LWPOLYLINE':
-    case 'LINE':
-      return Entities.Line(this);
-    case 'TEXT':
-      return Entities.Text(this);
-    case 'SOLID':
-      return Entities.Solid(this);
-    case 'POINT':
-      return Entities.Point(this);
-    case 'INSERT':
-      return Entities.Block(this);
-    // case 'SPLINE':
-    //   return Entities.Spline(this);
-    // case 'MTEXT':
-    //   return Entities.Mtext(this);
-    // case 'ELLIPSE':
-    //   return Entities.Ellipse(this);
-    // case 'DIMENSION':
-    //   const dimTypeEnum = this.props.dimensionType & 7;
+  const drawEntityFunction = Entities[this.type];
 
-    //   if (dimTypeEnum === 0) {
-    //     return Entities.Dimension(this);
-    //   } else {
-    //     console.log("Unsupported Dimension type: " + dimTypeEnum);
-    //   }
-    //   break;
-    default:
-      console.log("Unsupported Entity Type: " + JSON.stringify(this.type));
-    }
-
-  return null;
+  if (drawEntityFunction) {
+    return drawEntityFunction(this);
+  } else {
+    console.log("Unsupported Entity Type: " + JSON.stringify(this.type));
+   
+    return null;
+  }
 }
 
 export default Entity;
