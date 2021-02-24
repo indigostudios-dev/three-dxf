@@ -27,6 +27,9 @@ const Text = (entity) => {
   //Calculate width the plane has to be 
   const planeWidth = textureWidth * ratio;
 
+  const position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z);
+  const rotation = {z: entity.props.rotation * Math.PI / 180};
+
   // //Create dynamic texture and write the text
   // const dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", {width: textureWidth, height: textureHeight}, false);
   // const mat = new BABYLON.StandardMaterial("mat");
@@ -39,8 +42,6 @@ const Text = (entity) => {
   // plane.bakeTransformIntoVertices(BABYLON.Matrix.Translation(planeWidth / 2, planeHeight / 2, 0));
   // plane.position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z)
   
-  const position = new Vector3(entity.props.startPoint.x, entity.props.startPoint.y, entity.props.startPoint.z);
-  const rotation = {z: entity.props.rotation * Math.PI / 180};
   // if (entity.props.rotation) {
   //   plane.rotation.z = entity.props.rotation * Math.PI / 180;
   // }    
@@ -50,6 +51,7 @@ const Text = (entity) => {
   // plane.layerMask =  0x000002;
 
   return {
+    type: 'Text',
     color,
     font,
     fontSize,
