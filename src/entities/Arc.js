@@ -43,17 +43,23 @@ const Arc = (entity) => {
 
   const points = path.getPoints().map(point => new Vector3(point.x, point.y, 0));
 
-  const arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
-    useVertexAlpha: false,
-    points: points
-  });
+  // const arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+  //   useVertexAlpha: false,
+  //   points: points
+  // });
   
-  arc.color = color;
-  arc.position.x = entity.props.center.x;
-  arc.position.y = entity.props.center.y;
-  arc.position.z = entity.props.center.z;
+  // arc.color = color;
+  // arc.position.x = entity.props.center.x;
+  // arc.position.y = entity.props.center.y;
+  // arc.position.z = entity.props.center.z;
 
-  return arc;
+  return {
+    type: 'Line',
+    name,
+    points,
+    color,
+    position: entity.props.center
+  };
 }
 
 export default Arc;
