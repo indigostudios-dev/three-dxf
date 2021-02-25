@@ -4,6 +4,7 @@ import {
 } from '@babylonjs/core/Legacy/legacy';
 
 const Arc = (entity) => {
+  const name = entity.props.handle;
   const color = entity.getColor();
   const radius = entity.props.radius;
   const startAngle = entity.props.startAngle;
@@ -48,6 +49,7 @@ const Arc = (entity) => {
 
   return {
     type: 'Line',
+    name,
     points,
     color,
     position: entity.props.center
