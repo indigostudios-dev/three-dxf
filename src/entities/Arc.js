@@ -1,9 +1,4 @@
 import {
-  ArcCurve,
-  Geometry
-} from 'three';
-
-import {
   Arc2,
   Vector3,
   MeshBuilder
