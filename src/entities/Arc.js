@@ -1,6 +1,12 @@
 import {
-  Path2,
-  Vector3
+  ArcCurve,
+  Geometry
+} from 'three';
+
+import {
+  Arc2,
+  Vector3,
+  MeshBuilder
 } from '@babylonjs/core/Legacy/legacy';
 
 const Arc = (entity) => {
@@ -10,9 +16,10 @@ const Arc = (entity) => {
   const startAngle = entity.props.startAngle;
   const endAngle = entity.props.endAngle;
   const angleLength = entity.props.angleLength;
-
-  const direction = -angleLength / Math.abs(angleLength);
-
+  const midAngle = startAngle > endAngle
+    ? ((Math.PI * 2 - startAngle + endAngle) / 2 + startAngle) % (Math.PI * 2)
+    : (endAngle - startAngle) / 2 + startAngle;
+  
   let path;
 
   if (entity.type === 'CIRCLE') {
@@ -25,35 +32,33 @@ const Arc = (entity) => {
       y: radius * Math.sin(startAngle)
     }
 
+    const midPoint = {
+      x: radius * Math.cos(midAngle),
+      y: radius * Math.sin(midAngle)
+    }
+
     const endPoint = {
       x: radius * Math.cos(endAngle),
       y: radius * Math.sin(endAngle)
     }
 
     path = new BABYLON.Path2(startPoint.x, startPoint.y)
-      .addArcTo(radius * direction, 0, endPoint.x, endPoint.y, 32)
+      .addArcTo(midPoint.x, midPoint.y, endPoint.x, endPoint.y, 32);
   }
 
   const points = path.getPoints().map(point => new Vector3(point.x, point.y, 0));
 
-
-  // let arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
-  //   useVertexAlpha: false,
-  //   points: geometry.vertices
-  // });
+  const arc = BABYLON.MeshBuilder.CreateLines(entity.props.handle, {
+    useVertexAlpha: false,
+    points: points
+  });
   
-  // arc.color = entity.getColor();
-  // arc.position.x = entity.props.center.x;
-  // arc.position.y = entity.props.center.y;
-  // arc.position.z = entity.props.center.z;
+  arc.color = color;
+  arc.position.x = entity.props.center.x;
+  arc.position.y = entity.props.center.y;
+  arc.position.z = entity.props.center.z;
 
-  return {
-    type: 'Line',
-    name,
-    points,
-    color,
-    position: entity.props.center
-  };
+  return arc;
 }
 
 export default Arc;
