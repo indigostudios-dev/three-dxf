@@ -14,18 +14,11 @@ const Block = (entity) => {
     position: {}
   };
  
-  if (entity.props.xScale) group.scale.x = entity.props.xScale;
-  if (entity.props.yScale) group.scale.y = entity.props.yScale;
+  const xScale = entity.props.xScale ? entity.props.xScale: null;
+  const yScale = entity.props.yScale ? entity.props.yScale: null;
+  const rotation = entity.props.rotation ? entity.props.rotation * Math.PI / 180 : null;
+  const position = entity.props.position ? {x: entity.props.position.x, y: entity.props.position.y, z: entity.props.position.z}
 
-  if (entity.props.rotation) {
-    group.rotation.z = entity.props.rotation * Math.PI / 180;
-  }
-
-  if (entity.props.position) {
-    group.position.x = entity.props.position.x;
-    group.position.y = entity.props.position.y;
-    group.position.z = entity.props.position.z;
-  }
 
   // const registrationMark = new TransformNode('Registraton Mark');
   // registrationMark.isPickable = false;
@@ -42,9 +35,10 @@ const Block = (entity) => {
 
   return {
     type: 'TransformNode',
-    scale: group.scale,
-    rotation: group.rotation,
-    position: group.position
+    xScale,
+    yScale,
+    rotation,
+    position
   };
 }
 
