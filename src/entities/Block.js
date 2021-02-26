@@ -14,10 +14,10 @@ const Block = (entity) => {
     position: {}
   };
  
-  const xScale = entity.props.xScale ? entity.props.xScale: null;
-  const yScale = entity.props.yScale ? entity.props.yScale: null;
+  const xScale = entity.props.xScale ? entity.props.xScale : null;
+  const yScale = entity.props.yScale ? entity.props.yScale : null;
   const rotation = entity.props.rotation ? entity.props.rotation * Math.PI / 180 : null;
-  const position = entity.props.position ? {x: entity.props.position.x, y: entity.props.position.y, z: entity.props.position.z}
+  const position = entity.props.position ? {x: entity.props.position.x, y: entity.props.position.y, z: entity.props.position.z} : null;
 
 
   // const registrationMark = new TransformNode('Registraton Mark');
