@@ -1,5 +1,5 @@
 import {
-  Vector3,
+  Vector3
 } from '@babylonjs/core';
 
 const Text = (entity) => {

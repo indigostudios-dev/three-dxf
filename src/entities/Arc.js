@@ -1,4 +1,5 @@
 import {
+  Path2,
   Vector3
 } from '@babylonjs/core';
 
@@ -16,7 +17,7 @@ const Arc = (entity) => {
   let path;
 
   if (entity.type === 'CIRCLE') {
-    path = new BABYLON.Path2(radius, 0)
+    path = new Path2(radius, 0)
       .addArcTo(0, radius, -radius, 0, 16)
       .addArcTo(0,-radius, radius, 0, 16)
   } else {
@@ -35,7 +36,7 @@ const Arc = (entity) => {
       y: radius * Math.sin(endAngle)
     }
 
-    path = new BABYLON.Path2(startPoint.x, startPoint.y)
+    path = new Path2(startPoint.x, startPoint.y)
       .addArcTo(midPoint.x, midPoint.y, endPoint.x, endPoint.y, 32);
   }
 

@@ -1,12 +1,17 @@
-import * as BABYLON from '@babylonjs/core';
+import {
+  ArcRotateCamera,
+  Vector3,
+  Camera,
+  PointerEventTypes
+} from '@babylonjs/core';
 
 function Controls(scene) {
   this.scene = scene;
   this.engine = scene.getEngine();
 
    // name, alpha, beta, radius, target, scene
-  const camera = this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 10, BABYLON.Vector3.Zero());
-  camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+  const camera = this.camera = new ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 10, Vector3.Zero());
+  camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
   camera.inertia = 0;
   camera.panningInertia = 0;
   camera.attachControl(false, true);
@@ -36,7 +41,7 @@ function Controls(scene) {
         totalX - zoomDelta > max) return;
 
     this._zoomToPoint(zoomDelta);
-  }, BABYLON.PointerEventTypes.POINTERWHEEL);
+  }, PointerEventTypes.POINTERWHEEL);
 
   scene.onPointerObservable.add(this._panToPoint.bind(this))
 
@@ -59,7 +64,7 @@ Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
   const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
   const ratio = height / width;
 
-  this.zoomSteps = zoomStepZ || this.zoomSteps;
+  this.zoomSteps = zoomSteps || this.zoomSteps;
   this.zoomLevel = zoomLevel || this.zoomLevel;
 
   this.camera.orthoLeft = -this.zoomLevel / 2;
@@ -74,8 +79,8 @@ Controls.prototype._zoomToPoint = function (zoomDelta = 0) {
   const totalY = Math.abs(this.camera.orthoTop - this.camera.orthoBottom);
   const aspectRatio = totalY / totalX;
 
-  const target = BABYLON.Vector3.Unproject(
-    new BABYLON.Vector3(this.scene.pointerX, this.scene.pointerY, 0),
+  const target = Vector3.Unproject(
+    new Vector3(this.scene.pointerX, this.scene.pointerY, 0),
     width,
     height,
     this.camera.getWorldMatrix(),
@@ -107,7 +112,7 @@ Controls.prototype._zoomToPoint = function (zoomDelta = 0) {
 
 Controls.prototype._panToPoint = function ({ type, event }) {
   switch (type) {
-    case BABYLON.PointerEventTypes.POINTERDOWN:
+    case PointerEventTypes.POINTERDOWN:
       this.oldX = this.scene.pointerX;
       this.oldY = this.scene.pointerY;
 
@@ -119,7 +124,7 @@ Controls.prototype._panToPoint = function ({ type, event }) {
 
       break;
 
-    case BABYLON.PointerEventTypes.POINTERUP:
+    case PointerEventTypes.POINTERUP:
       if (event.button == 1) {
         this.panning = false;
         this.camera.attachControl(true);
@@ -127,7 +132,7 @@ Controls.prototype._panToPoint = function ({ type, event }) {
 
       break;
 
-    case BABYLON.PointerEventTypes.POINTERMOVE:
+    case PointerEventTypes.POINTERMOVE:
       if (this.panning) {
         const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
         const scaleWidth = (this.camera.orthoRight - this.camera.orthoLeft) / width;
