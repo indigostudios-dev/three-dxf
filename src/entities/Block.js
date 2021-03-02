@@ -1,6 +1,6 @@
 // import {
 //   TransformNode
-// } from '@babylonjs/core/Legacy/legacy';
+// } from '@babylonjs/core';
 
 const Block = (entity) => {
   const block = entity.source.blocks[entity.props.name];

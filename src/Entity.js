@@ -1,6 +1,6 @@
 import * as Entities from './entities';
 
-import { Color3 } from '@babylonjs/core/Legacy/legacy';
+import { Color3 } from '@babylonjs/core';
 
 /**
  * Entity class to draw a specific entity

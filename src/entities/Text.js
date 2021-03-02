@@ -1,6 +1,6 @@
 import {
   Vector3,
-} from '@babylonjs/core/Legacy/legacy';
+} from '@babylonjs/core';
 
 const Text = (entity) => {
   const text = entity.props.text;

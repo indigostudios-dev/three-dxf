@@ -1,8 +1,6 @@
 import {
-  Arc2,
-  Vector3,
-  MeshBuilder
-} from '@babylonjs/core/Legacy/legacy';
+  Vector3
+} from '@babylonjs/core';
 
 const Arc = (entity) => {
   const name = entity.props.handle;

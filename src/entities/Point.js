@@ -1,6 +1,6 @@
 import {
   Vector3
-} from '@babylonjs/core/Legacy/legacy';
+} from '@babylonjs/core';
 
 const Point = (entity) => {
   const position = new Vector3(entity.props.position.x, entity.props.position.y, entity.props.position.z);

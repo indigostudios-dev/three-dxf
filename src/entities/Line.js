@@ -1,7 +1,7 @@
 import {
   Vector3,
   // MeshBuilder
-} from '@babylonjs/core/Legacy/legacy';
+} from '@babylonjs/core';
 
 import BulgeGeometry from '../BulgeGeometry';
 

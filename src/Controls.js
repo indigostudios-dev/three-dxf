@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core/Legacy/legacy';
+import * as BABYLON from '@babylonjs/core';
 
 function Controls(scene) {
   this.scene = scene;
@@ -59,7 +59,7 @@ Controls.prototype.setZoom = function (zoomLevel, zoomSteps) {
   const {width, height} = this.engine.getRenderingCanvasClientRect() || {};
   const ratio = height / width;
 
-  this.zoomSteps = zoomSteps || this.zoomSteps;
+  this.zoomSteps = zoomStepZ || this.zoomSteps;
   this.zoomLevel = zoomLevel || this.zoomLevel;
 
   this.camera.orthoLeft = -this.zoomLevel / 2;

@@ -1,6 +1,6 @@
 import {
   Vector2
-} from '@babylonjs/core/Legacy/legacy';
+} from '@babylonjs/core';
 
 /**
  * Returns the angle in radians of the vector (p1,p2). In other words, imagine
