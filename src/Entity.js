@@ -39,9 +39,9 @@ Entity.prototype.getColor = function (getHexCode) {
   }
 
   if (getHexCode) {
-    return "#" + color.toString(16);
+    return "#" + color.toString(16).padStart(6, '0');
   } else {
-    return Color3.FromHexString("#" + color.toString(16));
+    return Color3.FromHexString("#" + color.toString(16).padStart(6, '0'));
   }
 }
 
