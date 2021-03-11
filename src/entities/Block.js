@@ -4,6 +4,7 @@
 
 const Block = (entity) => {
   const block = entity.source.blocks[entity.props.name];
+  const index = entity.props.index;
 
   if (!block.entities) return null;
 
@@ -42,6 +43,7 @@ const Block = (entity) => {
 
   return {
     type: 'TransformNode',
+    index,
     scale: group.scale,
     rotation: group.rotation,
     position: group.position
