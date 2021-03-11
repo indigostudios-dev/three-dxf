@@ -7,6 +7,7 @@ const Point = (entity) => {
 
   return {
     type: 'Mesh',
+    index: entity.index,
     position
   };
 }

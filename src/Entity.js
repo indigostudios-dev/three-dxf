@@ -17,7 +17,7 @@ function Entity(type, props, source) {
   const mesh = this.draw();
   mesh.name = this.props.handle;
   mesh.layer = this.props.layer;
-
+console.log(source)
   this.source = null;
   this.props = null;
   this.type = null;
